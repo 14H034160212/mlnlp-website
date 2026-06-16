@@ -43,7 +43,7 @@ async function findActivitiesByPage(page, size){
             const activityTypeId = activity["type_id"];
 
             const guestQuery = `
-                select id, name, organization
+                select id, name, organization, title, role
                 from activity_guest
                 where activity_type = ${activityType}
                   and activity_id = ${activityTypeId};

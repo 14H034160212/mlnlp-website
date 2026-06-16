@@ -84,7 +84,8 @@
   let selectHeader = select('#header')
   if (selectHeader) {
     const headerScrolled = () => {
-      if (window.scrollY > 200) {
+      const threshold = document.body.classList.contains('home-page') || document.body.classList.contains('committee-page') || document.body.classList.contains('project-page') || document.body.classList.contains('activity-page') ? 8 : 200
+      if (window.scrollY > threshold) {
         selectHeader.classList.add('header-scrolled')
         selectHeader.classList.remove('header-unscrolled')
       } else {
