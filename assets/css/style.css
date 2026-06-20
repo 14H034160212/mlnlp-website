@@ -24,6 +24,15 @@ body {
     overflow-x: clip;
 }
 
+/* 吸顶导航必须高于 #main：改版页里 #header 与 #main 同为 position:relative;z-index:1，
+   滚动后 #main（DOM 靠后）会盖住吸顶 header 并拦截点击。这里把 header 抬到最上层。 */
+body.home-page #header,
+body.committee-page #header,
+body.project-page #header,
+body.activity-page #header {
+    z-index: 1000;
+}
+
 a {
     color: #09009f;
     text-decoration: none;
