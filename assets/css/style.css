@@ -2559,21 +2559,8 @@ h6 {
 # 移动端导航修复
 --------------------------------------------------------------*/
 @media (max-width: 991px) {
-    /* 移动端头部用纯白不透明背景：部分手机浏览器不支持 backdrop-filter:blur，
-       半透明白(rgba 0.75)会透出后面内容显得发灰。强制纯白确保导航栏清晰。 */
-    body.home-page #header,
-    body.committee-page #header,
-    body.project-page #header,
-    body.activity-page #header,
-    body.home-page #header.header-scrolled,
-    body.committee-page #header.header-scrolled,
-    body.project-page #header.header-scrolled,
-    body.activity-page #header.header-scrolled {
-        background: #ffffff !important;
-        border-bottom: 1px solid rgba(148, 163, 184, 0.18);
-    }
-
-    /* 改版页头部为浅色背景，关闭态汉堡图标需深色才可见（基础为白色会隐形） */
+    /* 改版页头部为浅色背景，关闭态汉堡图标需深色才可见（基础为白色会隐形）。
+       只改图标颜色，不动导航栏本身的配色。 */
     body.home-page .mobile-nav-toggle,
     body.committee-page .mobile-nav-toggle,
     body.project-page .mobile-nav-toggle,
