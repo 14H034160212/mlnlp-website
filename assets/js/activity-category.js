@@ -430,9 +430,9 @@
         }
 
         totalPagesCache = await getTotalPages();
-        await initSlides();
         await loadPage(totalPagesCache, 1);
-        // 页面内点击分类只更新内容、不滚动，避免整页跳动（Tab 位置保持不变）
+        // 页面内点击分类只更新下方列表、不重渲染顶部轮播、不滚动，
+        // 保证顶部不动、页面不位移（仅下方内容变化）。
     }
 
     window.loadPage = loadPage;
