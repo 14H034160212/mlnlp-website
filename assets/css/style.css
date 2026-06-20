@@ -2559,6 +2559,20 @@ h6 {
 # 移动端导航修复
 --------------------------------------------------------------*/
 @media (max-width: 991px) {
+    /* 修「头部发灰」：头部原本 rgba(255,255,255,0.75) 半透明 + 毛玻璃模糊，
+       手机上模糊弱/失效时会透出后面内容显得发灰。这里只提高不透明度到 0.96（仍是白色、主色调不变），
+       让它不再透出内容；桌面端不受影响。 */
+    body.home-page #header,
+    body.committee-page #header,
+    body.project-page #header,
+    body.activity-page #header,
+    body.home-page #header.header-scrolled,
+    body.committee-page #header.header-scrolled,
+    body.project-page #header.header-scrolled,
+    body.activity-page #header.header-scrolled {
+        background: rgba(255, 255, 255, 0.96) !important;
+    }
+
     /* 改版页头部为浅色背景，关闭态汉堡图标需深色才可见（基础为白色会隐形）。
        只改图标颜色，不动导航栏本身的配色。 */
     body.home-page .mobile-nav-toggle,
