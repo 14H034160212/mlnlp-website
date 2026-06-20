@@ -24,12 +24,15 @@ body {
     overflow-x: clip;
 }
 
-/* 吸顶导航必须高于 #main：改版页里 #header 与 #main 同为 position:relative;z-index:1，
-   滚动后 #main（DOM 靠后）会盖住吸顶 header 并拦截点击。这里把 header 抬到最上层。 */
+/* 修复吸顶导航：改版页 CSS 里有一条靠后的同优先级规则把 #header 设回 position:relative,
+   导致 sticky 失效、导航随页面滚走。这里用更高优先级强制恢复 sticky，
+   并将 z-index 抬到 #main(=1) 之上，避免滚动后被内容遮挡拦截点击。 */
 body.home-page #header,
 body.committee-page #header,
 body.project-page #header,
 body.activity-page #header {
+    position: sticky;
+    top: 0;
     z-index: 1000;
 }
 
@@ -2493,6 +2496,7 @@ h6 {
 }
 
 #navbar .nav-dropdown-menu {
+    display: block;
     position: absolute;
     top: 100%;
     left: 50%;
