@@ -579,3 +579,53 @@ body.project-page::after {
         transform: none !important;
     }
 }
+
+/* ===== 项目分类 Tab / 标签（任务2：内容分类与标签化） ===== */
+.project-page .project-tabs {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 10px;
+    margin: 6px auto 34px;
+}
+
+.project-page .project-tab {
+    padding: 9px 22px;
+    border-radius: 999px;
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--project-muted);
+    background: var(--project-card);
+    border: 1px solid var(--project-line);
+    cursor: pointer;
+    transition: color 0.3s var(--project-ease), background 0.3s var(--project-ease), transform 0.3s var(--project-ease), box-shadow 0.3s var(--project-ease);
+}
+
+.project-page .project-tab:hover {
+    transform: translateY(-2px);
+    color: var(--project-accent-dark);
+}
+
+.project-page .project-tab.active {
+    color: #fff;
+    background: linear-gradient(135deg, var(--project-accent) 0%, var(--project-accent-dark) 100%);
+    border-color: transparent;
+    box-shadow: var(--project-shadow);
+}
+
+.project-page .project-card.is-hidden {
+    display: none !important;
+}
+
+.project-page .project-tag {
+    flex: 0 0 auto;
+    margin-left: auto;
+    padding: 5px 12px;
+    border-radius: 999px;
+    font-size: 12px;
+    font-weight: 600;
+    white-space: nowrap;
+    color: var(--project-accent-dark);
+    background: rgba(14, 165, 233, 0.12);
+    border: 1px solid rgba(14, 165, 233, 0.22);
+}

@@ -1211,3 +1211,36 @@ body.activity-page::after {
         transform: none;
     }
 }
+
+/* ===== 活动分类 Tab（任务3：按类型横向分类） ===== */
+.activity-page .activity-tabs {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 10px;
+    margin: 4px auto 30px;
+}
+
+.activity-page .activity-tab {
+    padding: 9px 22px;
+    border-radius: 999px;
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--activity-muted);
+    background: var(--activity-card);
+    border: 1px solid var(--activity-line);
+    cursor: pointer;
+    transition: color 0.3s var(--activity-ease), background 0.3s var(--activity-ease), transform 0.3s var(--activity-ease), box-shadow 0.3s var(--activity-ease);
+}
+
+.activity-page .activity-tab:hover {
+    transform: translateY(-2px);
+    color: var(--activity-accent-dark);
+}
+
+.activity-page .activity-tab.active {
+    color: #fff;
+    background: linear-gradient(135deg, var(--activity-accent) 0%, var(--activity-accent-dark) 100%);
+    border-color: transparent;
+    box-shadow: 0 12px 30px rgba(15, 23, 42, 0.12);
+}

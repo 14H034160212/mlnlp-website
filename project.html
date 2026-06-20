@@ -46,7 +46,7 @@
   <link href="assets/vendor/glightbox/css/glightbox.min.css" rel="stylesheet">
   <link href="assets/vendor/swiper/swiper-bundle.min.css" rel="stylesheet">
   <link href="assets/css/style.css" rel="stylesheet">
-  <link href="assets/css/project.css?v=20260616-projects-equal-cards" rel="stylesheet">
+  <link href="assets/css/project.css?v=20260620-tabs" rel="stylesheet">
 
   <!-- Template Main CSS File -->
   <script src="assets/js/jquery.min.js"></script>
@@ -88,6 +88,8 @@
         <h2>开源项目</h2>
       </div>
 
+      <div id="project-tabs" class="project-tabs" role="tablist" aria-label="项目分类"></div>
+
       <div id="project-container" class="section team">
         <div id="project-container-data" class="project-grid"></div>
       </div>
@@ -101,6 +103,39 @@
   // 页面加载完成后执行获取数据的操作
   window.onload = async function () {
     await initProjects();
+  };
+
+  // 项目分类映射（按 GitHub 仓库名归类）
+  const PROJECT_CATEGORY = {
+    'MLNLP-World/MIT-Linear-Algebra-Notes': '课程笔记',
+    'MLNLP-World/DeepLearning-MuLi-Notes': '课程笔记',
+    'MLNLP-World/Deep_Learning_Notes': '课程笔记',
+    'MLNLP-World/NLP-Course-Chinese': '课程笔记',
+    'MLNLP-World/Pytorch-Deep-Learning-Practice-Notes': '课程笔记',
+    'MLNLP-World/LLMs-from-scratch-CN': '课程笔记',
+    'MLNLP-World/MyArxiv': '实用工具',
+    'MLNLP-World/SimBiber': '实用工具',
+    'MLNLP-World/AI-Paper-Collector': '实用工具',
+    'MLNLP-World/Top-AI-Conferences-Paper-with-Code': '实用工具',
+    'MLNLP-World/Paper-Picture-Writing-Code': '论文写作',
+    'MLNLP-World/Paper-Writing-Tips': '论文写作'
+  };
+  const PROJECT_CATEGORIES = ['全部', '课程笔记', '实用工具', '论文写作'];
+
+  function categoryOf(project) {
+    return PROJECT_CATEGORY[project.github_repo] || '其他';
+  }
+
+  // Tab 切换：按分类过滤项目卡片
+  window.filterProjects = function (category, btn) {
+    document.querySelectorAll('#project-tabs .project-tab').forEach((b) => b.classList.remove('active'));
+    if (btn) {
+      btn.classList.add('active');
+    }
+    document.querySelectorAll('#project-container-data .project-card').forEach((card) => {
+      const show = category === '全部' || card.dataset.category === category;
+      card.classList.toggle('is-hidden', !show);
+    });
   };
 
   /**
@@ -122,14 +157,16 @@
 
       for (let i = 0; i < result.length; i++) {
         const project = result[i];
+        const category = categoryOf(project);
         html_str_list.push(`
-          <article class="project-card" data-repo="${project.github_repo}">
+          <article class="project-card" data-repo="${project.github_repo}" data-category="${category}">
             <a class="project-link" target="_blank" href="${project.html_url}" aria-label="View ${project.title} on GitHub">
               <div class="project-card__top">
                 <div class="project-github-icon" aria-hidden="true">
                   <i class="bi bi-github"></i>
                 </div>
                 <h3 class="project-name">${project.title}</h3>
+                <span class="project-tag">${category}</span>
               </div>
 
               <p class="project-description">${project.description}</p>
@@ -156,6 +193,12 @@
 
       const parentContainer = document.getElementById('project-container-data');
       parentContainer.innerHTML = html_str;
+
+      // 渲染分类 Tab
+      const tabsHtml = PROJECT_CATEGORIES.map((c, i) =>
+        `<button type="button" class="project-tab${i === 0 ? ' active' : ''}" role="tab" onclick="filterProjects('${c}', this)">${c}</button>`
+      ).join('');
+      document.getElementById('project-tabs').innerHTML = tabsHtml;
 
     } catch (error) {
       console.error('Error fetching seminar data:', error);
@@ -216,6 +259,9 @@
   <div class="container">
     <div class="copyright">
       &copy; Copyright <strong>TheEvent</strong>. Modified by <strong>MLNLP</strong>. All Rights Reserved
+    </div>
+    <div class="credits site-maintainers">
+        网站建设与维护：范静如 · 包启明 · 周璟轩
     </div>
     <div class="credits">
       Designed by <a href="https://bootstrapmade.com/">BootstrapMade</a>
