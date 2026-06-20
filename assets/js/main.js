@@ -220,9 +220,170 @@
   })
 
   /**
+   * Tooltip for truncated content
+   */
+  const initContentTooltips = () => {
+    if (document.querySelector('.mlnlp-content-tooltip')) {
+      return
+    }
+
+    const tooltip = document.createElement('div')
+    tooltip.className = 'mlnlp-content-tooltip'
+    tooltip.setAttribute('role', 'tooltip')
+    tooltip.setAttribute('aria-hidden', 'true')
+    tooltip.hidden = true
+    document.body.appendChild(tooltip)
+
+    const supportsHover = window.matchMedia('(hover: hover) and (pointer: fine)').matches
+    const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches
+    let activeTarget = null
+    let hideTimer = null
+
+    const clamp = (value, min, max) => Math.min(Math.max(value, min), max)
+
+    const hideTooltip = () => {
+      activeTarget = null
+      tooltip.classList.remove('is-visible')
+      tooltip.setAttribute('aria-hidden', 'true')
+      tooltip.hidden = true
+    }
+
+    const positionTooltip = () => {
+      if (!activeTarget || tooltip.hidden) {
+        return
+      }
+
+      const targetRect = activeTarget.getBoundingClientRect()
+      const padding = 16
+      const gap = 12
+      const maxWidth = Math.min(560, window.innerWidth - padding * 2)
+      tooltip.style.maxWidth = `${maxWidth}px`
+      tooltip.style.left = '0px'
+      tooltip.style.top = '0px'
+      tooltip.style.visibility = 'hidden'
+
+      const tooltipRect = tooltip.getBoundingClientRect()
+      const maxLeft = Math.max(padding, window.innerWidth - padding - tooltipRect.width)
+      const maxTop = Math.max(padding, window.innerHeight - padding - tooltipRect.height)
+
+      let left = clamp(targetRect.left, padding, maxLeft)
+      let top = targetRect.bottom + gap
+
+      if (top + tooltipRect.height > window.innerHeight - padding) {
+        const above = targetRect.top - tooltipRect.height - gap
+        top = above >= padding ? above : maxTop
+      }
+
+      tooltip.style.left = `${clamp(left, padding, maxLeft)}px`
+      tooltip.style.top = `${clamp(top, padding, maxTop)}px`
+      tooltip.style.visibility = 'visible'
+    }
+
+    const showTooltip = (target) => {
+      const content = (target.getAttribute('data-full-content') || '').replace(/\s+/g, ' ').trim()
+      if (!content) {
+        hideTooltip()
+        return
+      }
+
+      activeTarget = target
+      tooltip.textContent = content
+      tooltip.hidden = false
+      tooltip.setAttribute('aria-hidden', 'false')
+      tooltip.classList.add('is-visible')
+      positionTooltip()
+    }
+
+    const clearHideTimer = () => {
+      if (hideTimer) {
+        window.clearTimeout(hideTimer)
+        hideTimer = null
+      }
+    }
+
+    const scheduleHide = () => {
+      clearHideTimer()
+      hideTimer = window.setTimeout(hideTooltip, 80)
+    }
+
+    if (supportsHover) {
+      document.addEventListener('pointerover', (event) => {
+        const target = event.target.closest('[data-full-content]')
+        if (!target) {
+          return
+        }
+
+        clearHideTimer()
+        if (target !== activeTarget) {
+          showTooltip(target)
+        } else {
+          positionTooltip()
+        }
+      })
+
+      document.addEventListener('pointerout', (event) => {
+        const target = event.target.closest('[data-full-content]')
+        if (!target || target !== activeTarget) {
+          return
+        }
+
+        const related = event.relatedTarget
+        if (related && target.contains(related)) {
+          return
+        }
+
+        scheduleHide()
+      })
+    }
+
+    document.addEventListener('focusin', (event) => {
+      const target = event.target.closest('[data-full-content]')
+      if (!target) {
+        return
+      }
+
+      clearHideTimer()
+      showTooltip(target)
+    })
+
+    document.addEventListener('focusout', (event) => {
+      const target = event.target.closest('[data-full-content]')
+      if (!target || target !== activeTarget) {
+        return
+      }
+
+      scheduleHide()
+    })
+
+    window.addEventListener('keydown', (event) => {
+      if (event.key === 'Escape') {
+        clearHideTimer()
+        hideTooltip()
+      }
+    })
+
+    window.addEventListener('scroll', () => {
+      if (activeTarget) {
+        hideTooltip()
+      }
+    }, true)
+
+    window.addEventListener('resize', () => {
+      if (activeTarget && !tooltip.hidden) {
+        positionTooltip()
+      }
+    })
+
+    if (reduceMotion) {
+      tooltip.style.transition = 'none'
+    }
+  }
+
+  /**
    * Animation on scroll
    */
   window.addEventListener('load', () => {
+    initContentTooltips()
     AOS.init({
       duration: 1000,
       easing: 'ease-in-out',

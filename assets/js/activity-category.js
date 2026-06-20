@@ -8,7 +8,6 @@
     let slideIndex = 1;
     let autoSlideInterval = null;
     let featuredActivities = [];
-    let featuredGuests = [];
     let totalPagesCache = 1;
 
     const typeMap = {
@@ -30,31 +29,6 @@
         .replace(/<\/?[^>]+>/g, "")
         .replace(/\s+/g, " ")
         .trim();
-
-    const formatOrganization = (organization) => String(organization ?? "")
-        .replaceAll("(", "〔")
-        .replaceAll(")", "〕")
-        .replaceAll("（", "〔")
-        .replaceAll("）", "〕");
-
-    const getPrimaryGuest = (guests) => {
-        if (!Array.isArray(guests) || guests.length === 0) {
-            return null;
-        }
-
-        return guests.find((guest) => Number(guest.role) === 3) || guests[0];
-    };
-
-    const formatGuestList = (guests) => {
-        if (!Array.isArray(guests) || guests.length === 0) {
-            return "待公布";
-        }
-
-        return guests.map((guest) => {
-            const organization = formatOrganization(guest.organization);
-            return organization ? `${guest.name}（${organization}）` : guest.name;
-        }).join("、");
-    };
 
     const getIssueText = (activity) => {
         if (!activity) {
@@ -94,6 +68,16 @@
             topic: topicText,
             subtopic: Number(activity?.type) === 1 ? "面向机器学习与自然语言处理的年度学术交流" : "开放、深入的学术交流"
         };
+    };
+
+    const getEventSummary = (activity, maxLength = 96) => {
+        const fallback = Number(activity?.type) === 1
+            ? "围绕机器学习与自然语言处理的年度学术交流。"
+            : "围绕机器学习与自然语言处理的前沿议题展开交流。";
+        const full = stripHtml(activity?.description || fallback) || fallback;
+        const summary = full.length > maxLength ? `${full.slice(0, maxLength).trim()}...` : full;
+
+        return { summary, full };
     };
 
     const formatEventTime = (activity) => {
@@ -163,24 +147,22 @@
 
     const updateEventInfo = (index) => {
         const activity = featuredActivities[index - 1];
-        const guests = featuredGuests[index - 1] || [];
         if (!activity) {
             return;
         }
 
-        const primaryGuest = getPrimaryGuest(guests);
         const topic = parseTopic(activity);
         const typeLabel = typeMap[activity.type] || "MLNLP Event";
-        const organization = primaryGuest
-            ? `${primaryGuest.organization || ""}${primaryGuest.title || ""}` || "嘉宾信息待公布"
-            : "嘉宾信息待公布";
+        const summary = getEventSummary(activity);
+        const summaryNode = document.getElementById("event-subtopic");
 
         setText("event-type-pill", typeLabel);
         setText("event-issue-pill", getIssueText(activity));
         setText("event-topic", topic.topic);
-        setText("event-subtopic", topic.subtopic);
-        setText("event-speaker", primaryGuest ? primaryGuest.name : "嘉宾待公布");
-        setText("event-organization", organization);
+        setText("event-subtopic", summary.summary);
+        summaryNode?.setAttribute("data-full-content", summary.full);
+        summaryNode?.setAttribute("title", summary.full);
+        summaryNode?.setAttribute("tabindex", "0");
         setText("event-time", formatEventTime(activity));
 
         updateLink("event-detail-link", activity.html_url, "查看详情", "详情待更新");
@@ -192,12 +174,10 @@
             const page = Number(currentPage) || 1;
             const result = await findActivitiesByPage(page, PAGE_SIZE);
             const activities = result.activities || [];
-            const guestList = result.guestList || [];
 
             const html = activities.map((activity, index) => {
-                const guests = guestList[index] || [];
                 const date = formatListDate(activity.time);
-                const description = stripHtml(activity.description);
+                const description = getEventSummary(activity, 120);
                 const typeLabel = typeMap[activity.type] || "MLNLP Event";
 
                 return `
@@ -219,11 +199,7 @@
                                         <p class="activity-category-data-day">${escapeHtml(date.day)}</p>
                                     </div>
                                 </div>
-                                <div class="guest-container">
-                                    <p class="activity-category-guest">嘉宾</p>
-                                    <p class="activity-category-data-guests">${escapeHtml(formatGuestList(guests))}</p>
-                                </div>
-                                <p class="activity-category-data-description">${escapeHtml(description)}</p>
+                                <p class="activity-category-data-description" tabindex="0" title="${escapeHtml(description.full)}" data-full-content="${escapeHtml(description.full)}">${escapeHtml(description.summary)}</p>
                             </div>
                         </div>
                     </article>
@@ -283,7 +259,6 @@
         try {
             const result = await findActivitiesByPage(1, PAGE_SIZE);
             featuredActivities = result.activities || [];
-            featuredGuests = result.guestList || [];
 
             const slidesHtml = featuredActivities.map((activity, index) => `
                 <a href="${escapeHtml(activity.html_url)}" class="slide" aria-label="${escapeHtml(activity.title)}">

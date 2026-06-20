@@ -1,3 +1,15 @@
+function buildActivityPeople(segments) {
+    const people = Array.isArray(segments) ? segments : [];
+    const chair = people.find((guest) => Number(guest.role) === 1) || null;
+
+    return {
+        chair,
+        conferenceChair: chair,
+        hosts: people.filter((guest) => Number(guest.role) === 2),
+        speakers: people.filter((guest) => Number(guest.role) === 3)
+    };
+}
+
 async function findActivity(type, typeId) {
     // 查询活动信息
     const activityQuery = `
@@ -16,11 +28,12 @@ async function findActivity(type, typeId) {
         where activity_type = ${type}
           and activity_id = ${typeId};
     `;
-    const activitySegments = await execute(activitySegmentQuery);
+    const activitySegments = await execute(activitySegmentQuery) || [];
 
     return {
         "activity": activity,
-        "activitySegments": activitySegments
+        "activitySegments": activitySegments,
+        "activityPeople": buildActivityPeople(activitySegments)
     };
 }
 
@@ -36,9 +49,10 @@ async function findActivitiesByPage(page, size){
     `;
     const activities = await execute(ActivityQuery);
 
-    const guestList = []
+    const guestList = [];
+    const activityPeopleList = [];
     if (activities != null) {
-        for (activity of activities) {
+        for (const activity of activities) {
             const activityType = activity["type"];
             const activityTypeId = activity["type_id"];
 
@@ -48,15 +62,17 @@ async function findActivitiesByPage(page, size){
                 where activity_type = ${activityType}
                   and activity_id = ${activityTypeId};
             `;
-            const segments = await execute(guestQuery);
+            const segments = await execute(guestQuery) || [];
 
             guestList.push(segments);
+            activityPeopleList.push(buildActivityPeople(segments));
         }
     }
 
     return {
         "activities": activities,
-        "guestList": guestList
+        "guestList": guestList,
+        "activityPeopleList": activityPeopleList
     }
 }
 

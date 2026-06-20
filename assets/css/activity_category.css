@@ -376,12 +376,21 @@ body.activity-page::after {
 }
 
 .activity-page .event-subtopic {
+    position: relative;
     margin: 14px 0 0;
     color: var(--activity-body);
     font-size: 17px;
     font-weight: 400;
     line-height: 1.7;
     overflow-wrap: anywhere;
+    display: -webkit-box;
+    overflow: hidden;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 4;
+}
+
+.activity-page .event-subtopic[data-full-content] {
+    cursor: help;
 }
 
 .activity-page .event-meta-list {
@@ -743,37 +752,10 @@ body.activity-page::after {
     color: var(--activity-heading);
 }
 
-.activity-page .guest-container {
-    display: flex;
-    align-items: flex-start;
-    gap: 12px;
-    margin: 20px 0 0;
-    color: var(--activity-body);
-    font-size: 15px;
-    line-height: 1.7;
-}
-
-.activity-page .activity-category-guest {
-    flex: 0 0 auto;
-    margin: 0;
-    padding: 0;
-    color: var(--activity-muted);
-    font-size: 13px;
-    font-weight: 600;
-    text-align: left;
-    white-space: nowrap;
-}
-
-.activity-page .activity-category-data-guests {
-    flex: 1 1 auto;
-    margin: 0;
-    color: var(--activity-body);
-    text-align: left;
-}
-
 .activity-page .activity-category-data-description {
+    position: relative;
     display: -webkit-box;
-    margin: 14px 0 0;
+    margin: 18px 0 0;
     overflow: hidden;
     color: var(--activity-body);
     font-size: 15px;
@@ -782,6 +764,10 @@ body.activity-page::after {
     text-align: left;
     -webkit-box-orient: vertical;
     -webkit-line-clamp: 2;
+}
+
+.activity-page .activity-category-data-description[data-full-content] {
+    cursor: help;
 }
 
 .activity-page #pagination {
@@ -890,20 +876,12 @@ body.activity-page::after {
     animation: activityFadeUp 0.55s ease-out 0.54s forwards;
 }
 
-.activity-page.activity-page--enhanced .event-showcase.is-visible .event-meta-item:nth-child(1) {
+.activity-page.activity-page--enhanced .event-showcase.is-visible .event-meta-item {
     animation: activityFadeUp 0.55s ease-out 0.60s forwards;
 }
 
-.activity-page.activity-page--enhanced .event-showcase.is-visible .event-meta-item:nth-child(2) {
-    animation: activityFadeUp 0.55s ease-out 0.66s forwards;
-}
-
-.activity-page.activity-page--enhanced .event-showcase.is-visible .event-meta-item:nth-child(3) {
-    animation: activityFadeUp 0.55s ease-out 0.72s forwards;
-}
-
 .activity-page.activity-page--enhanced .event-showcase.is-visible .event-actions {
-    animation: activityFadeUp 0.55s ease-out 0.78s forwards;
+    animation: activityFadeUp 0.55s ease-out 0.64s forwards;
 }
 
 .activity-page.activity-page--enhanced #activity-category-title.is-visible {
@@ -1184,10 +1162,6 @@ body.activity-page::after {
         justify-content: flex-start;
     }
 
-    .activity-page .guest-container {
-        flex-direction: column;
-        gap: 5px;
-    }
 }
 
 @media (prefers-reduced-motion: reduce) {
