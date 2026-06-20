@@ -16,15 +16,15 @@
         gtag('config', 'G-XEN8DSJX72');
     </script>
     <script src="./assets/vendor/sql/sql-wasm.js"></script>
-    <script src="./assets/js/db/db.js?v=20260620-fix9"></script>
-    <script src="./assets/js/db/member.js?v=20260620-fix9"></script>
+    <script src="./assets/js/db/db.js?v=20260620-fix10"></script>
+    <script src="./assets/js/db/member.js?v=20260620-fix10"></script>
 
     <meta charset="utf-8">
     <!-- 设置视口，使页面在不同设备上自适应屏幕宽度，初始缩放比例为1.0 -->
     <meta content="width=device-width, initial-scale=1.0" name="viewport">
 
     <!-- 页面标题 -->
-    <title>历届成员</title>
+    <title>全部成员</title>
     <!-- 页面描述 -->
     <meta content="" name="description">
     <!-- 页面关键词 -->
@@ -46,9 +46,9 @@
     <link href="assets/vendor/swiper/swiper-bundle.min.css" rel="stylesheet">
 
     <!-- Template Main CSS File -->
-    <link href="assets/css/style.css?v=20260620-fix9" rel="stylesheet">
-    <link href="assets/css/committee.css?v=20260620-fix9" rel="stylesheet">
-    <script src="assets/js/jquery.min.js?v=20260620-fix9"></script>
+    <link href="assets/css/style.css?v=20260620-fix10" rel="stylesheet">
+    <link href="assets/css/committee.css?v=20260620-fix10" rel="stylesheet">
+    <script src="assets/js/jquery.min.js?v=20260620-fix10"></script>
 </head>
 
 <body class="committee-page">
@@ -99,9 +99,9 @@
     <section id="committee" class="committee-page-section">
         <div class="container committee-shell">
             <div id="committee-title" class="section-header committee-html committee-hero">
-                <p class="committee-eyebrow">Former Community Members</p>
-                <h2>历届成员</h2>
-                <p class="committee-subtitle">感谢历届成员长期以来对 MLNLP 社区建设与学术传播的支持。</p>
+                <p class="committee-eyebrow">All Community Members</p>
+                <h2>全部成员</h2>
+                <p class="committee-subtitle">MLNLP 社区历届委员与秘书处成员一览，感谢每一位成员的贡献。</p>
                 <span id="committee-title-tip" class="sort-pill">按照姓名排序</span>
             </div>
 
@@ -126,7 +126,7 @@
     };
 
     /**
-     * 初始化历届成员信息（仅展示非当届的历届成员）
+     * 初始化全部成员信息（展示所有届，含当届与历届）
      */
     async function initCommitteeHistory() {
         try {
@@ -141,7 +141,7 @@
                 <section class="member-group member-group-former">
             `);
 
-                for (let j = 1; j < membersList.length; j++) {
+                for (let j = 0; j < membersList.length; j++) {
                     const members = result[i][j];
                     html_str_list.push(`
                         <h2 class="team-chair">${membersList[0][0].role}</h2>
@@ -249,8 +249,8 @@
 <script src="assets/vendor/php-email-form/validate.js"></script>
 
 <!-- Template Main JS File -->
-<script src="assets/js/main.js?v=20260620-fix9"></script>
-<script src="assets/js/committee.js?v=20260620-fix9"></script>
+<script src="assets/js/main.js?v=20260620-fix10"></script>
+<script src="assets/js/committee.js?v=20260620-fix10"></script>
 
 </body>
 
