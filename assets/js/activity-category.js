@@ -266,7 +266,7 @@
 
     async function initSlides() {
         try {
-            const result = await findActivitiesByPage(1, PAGE_SIZE);
+            const result = await findActivitiesByPage(1, PAGE_SIZE, currentType);
             featuredActivities = result.activities || [];
 
             const slidesHtml = featuredActivities.map((activity, index) => `
@@ -430,6 +430,7 @@
         }
 
         totalPagesCache = await getTotalPages();
+        await initSlides();
         await loadPage(totalPagesCache, 1);
     }
 
