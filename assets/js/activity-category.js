@@ -432,6 +432,12 @@
         totalPagesCache = await getTotalPages();
         await initSlides();
         await loadPage(totalPagesCache, 1);
+
+        // 点击任意分类后统一滚动到「往期活动」标题，保证各分类落点一致
+        const target = document.getElementById("schedule");
+        if (target) {
+            target.scrollIntoView({ behavior: "smooth", block: "start" });
+        }
     }
 
     window.loadPage = loadPage;
@@ -447,10 +453,10 @@
         const params = new URLSearchParams(window.location.search);
         const page = Number(params.get("page")) || 1;
 
-        // 支持通过 URL ?type= 直接筛选（导航下拉跳转）
+        // 支持通过 URL ?type= 直接筛选（导航下拉跳转，含「全部」type=0）
+        const hasTypeParam = params.has("type");
         const typeParam = Number(params.get("type"));
-        const fromDropdown = [1, 2, 3].includes(typeParam);
-        if (fromDropdown) {
+        if ([1, 2, 3].includes(typeParam)) {
             currentType = typeParam;
         }
 
@@ -460,8 +466,8 @@
         await initSlides();
         await loadPage(totalPagesCache, page);
 
-        // 从导航下拉带分类跳转过来时，自动滚动到「往期活动」列表区
-        if (fromDropdown) {
+        // 从导航下拉带分类跳转过来时（含「全部」），自动滚动到「往期活动」列表区
+        if (hasTypeParam) {
             const target = document.getElementById("schedule");
             if (target) {
                 setTimeout(() => target.scrollIntoView({ behavior: "smooth", block: "start" }), 250);
