@@ -19,7 +19,9 @@ body {
         Roboto,
         Helvetica,
         Arial, "Hiragino Sans GB", "Microsoft YaHei", "WenQuanYi Micro Hei", sans-serif;
-    overflow-x: hidden;
+    /* 用 clip 而非 hidden：同样裁掉横向溢出，但不会把 body 变成滚动容器，
+       从而保证 #header 的 position: sticky 吸顶正常（hidden 会令 overflow-y 计算为 auto 而破坏 sticky）。 */
+    overflow-x: clip;
 }
 
 a {
