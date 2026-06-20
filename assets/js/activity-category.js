@@ -432,12 +432,7 @@
         totalPagesCache = await getTotalPages();
         await initSlides();
         await loadPage(totalPagesCache, 1);
-
-        // 点击任意分类后统一滚动到「往期活动」标题，保证各分类落点一致
-        const target = document.getElementById("schedule");
-        if (target) {
-            target.scrollIntoView({ behavior: "smooth", block: "start" });
-        }
+        // 页面内点击分类只更新内容、不滚动，避免整页跳动（Tab 位置保持不变）
     }
 
     window.loadPage = loadPage;
