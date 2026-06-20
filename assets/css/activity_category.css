@@ -1244,3 +1244,8 @@ body.activity-page::after {
     border-color: transparent;
     box-shadow: 0 12px 30px rgba(15, 23, 42, 0.12);
 }
+
+/* 从导航下拉跳转滚动到列表时，留出吸顶头部的高度 */
+.activity-page #schedule {
+    scroll-margin-top: 86px;
+}

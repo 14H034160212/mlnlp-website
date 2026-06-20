@@ -449,7 +449,8 @@
 
         // 支持通过 URL ?type= 直接筛选（导航下拉跳转）
         const typeParam = Number(params.get("type"));
-        if ([1, 2, 3].includes(typeParam)) {
+        const fromDropdown = [1, 2, 3].includes(typeParam);
+        if (fromDropdown) {
             currentType = typeParam;
         }
 
@@ -458,5 +459,13 @@
         totalPagesCache = await getTotalPages();
         await initSlides();
         await loadPage(totalPagesCache, page);
+
+        // 从导航下拉带分类跳转过来时，自动滚动到「往期活动」列表区
+        if (fromDropdown) {
+            const target = document.getElementById("schedule");
+            if (target) {
+                setTimeout(() => target.scrollIntoView({ behavior: "smooth", block: "start" }), 250);
+            }
+        }
     });
 })();
