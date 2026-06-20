@@ -16,8 +16,8 @@
         gtag('config', 'G-XEN8DSJX72');
     </script>
     <script src="./assets/vendor/sql/sql-wasm.js"></script>
-    <script src="./assets/js/db/db.js?v=20260620-fix2"></script>
-    <script src="./assets/js/db/member.js?v=20260620-fix2"></script>
+    <script src="./assets/js/db/db.js?v=20260620-fix3"></script>
+    <script src="./assets/js/db/member.js?v=20260620-fix3"></script>
 
     <meta charset="utf-8">
     <!-- 设置视口，使页面在不同设备上自适应屏幕宽度，初始缩放比例为1.0 -->
@@ -46,9 +46,9 @@
     <link href="assets/vendor/swiper/swiper-bundle.min.css" rel="stylesheet">
 
     <!-- Template Main CSS File -->
-    <link href="assets/css/style.css?v=20260620-fix2" rel="stylesheet">
-    <link href="assets/css/committee.css?v=20260620-fix2" rel="stylesheet">
-    <script src="assets/js/jquery.min.js?v=20260620-fix2"></script>
+    <link href="assets/css/style.css?v=20260620-fix3" rel="stylesheet">
+    <link href="assets/css/committee.css?v=20260620-fix3" rel="stylesheet">
+    <script src="assets/js/jquery.min.js?v=20260620-fix3"></script>
 </head>
 
 <body class="committee-page">
@@ -66,8 +66,22 @@
         <nav id="navbar" class="navbar order-last order-lg-0">
             <ul>
                 <li><a class="nav-link scrollto" href="index.html">首页</a></li>
-                <li><a class="nav-link scrollto" href="activity_category.html">学术活动</a></li>
-                <li><a class="nav-link scrollto" href="project.html">开源项目</a></li>
+                <li class="nav-dropdown"><a class="nav-link scrollto" href="activity_category.html">学术活动</a>
+                    <ul class="nav-dropdown-menu">
+                        <li><a href="activity_category.html?type=0">全部</a></li>
+                        <li><a href="activity_category.html?type=1">年度大会</a></li>
+                        <li><a href="activity_category.html?type=2">学术研讨会</a></li>
+                        <li><a href="activity_category.html?type=3">学术Talk</a></li>
+                    </ul>
+                </li>
+                <li class="nav-dropdown"><a class="nav-link scrollto" href="project.html">开源项目</a>
+                    <ul class="nav-dropdown-menu">
+                        <li><a href="project.html?cat=全部">全部</a></li>
+                        <li><a href="project.html?cat=课程笔记">课程笔记</a></li>
+                        <li><a href="project.html?cat=实用工具">实用工具</a></li>
+                        <li><a href="project.html?cat=论文写作">论文写作</a></li>
+                    </ul>
+                </li>
                 <li><a class="nav-link scrollto active" href="committee.html">社区成员</a></li>
                 <li><a class="nav-link scrollto" href="#footer">联系我们</a></li>
             </ul>
@@ -235,8 +249,8 @@
 <script src="assets/vendor/php-email-form/validate.js"></script>
 
 <!-- Template Main JS File -->
-<script src="assets/js/main.js?v=20260620-fix2"></script>
-<script src="assets/js/committee.js?v=20260620-fix2"></script>
+<script src="assets/js/main.js?v=20260620-fix3"></script>
+<script src="assets/js/committee.js?v=20260620-fix3"></script>
 
 </body>
 

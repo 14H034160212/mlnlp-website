@@ -446,6 +446,12 @@
         const params = new URLSearchParams(window.location.search);
         const page = Number(params.get("page")) || 1;
 
+        // 支持通过 URL ?type= 直接筛选（导航下拉跳转）
+        const typeParam = Number(params.get("type"));
+        if ([1, 2, 3].includes(typeParam)) {
+            currentType = typeParam;
+        }
+
         initEntranceAnimations();
         renderTypeTabs();
         totalPagesCache = await getTotalPages();

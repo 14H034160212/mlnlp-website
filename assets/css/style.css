@@ -2484,3 +2484,69 @@ h6 {
     opacity: 1;
     transform: translateY(0);
 }
+
+/*--------------------------------------------------------------
+# 导航分类下拉菜单（学术活动 / 开源项目）
+--------------------------------------------------------------*/
+#navbar .nav-dropdown {
+    position: relative;
+}
+
+#navbar .nav-dropdown-menu {
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    transform: translateX(-50%) translateY(10px);
+    min-width: 168px;
+    margin: 0;
+    padding: 8px 0;
+    list-style: none;
+    background: #ffffff;
+    border: 1px solid rgba(148, 163, 184, 0.18);
+    border-radius: 14px;
+    box-shadow: 0 18px 44px rgba(15, 23, 42, 0.14);
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.22s ease, transform 0.22s ease, visibility 0.22s ease;
+    z-index: 1002;
+}
+
+#navbar .nav-dropdown:hover > .nav-dropdown-menu,
+#navbar .nav-dropdown:focus-within > .nav-dropdown-menu {
+    opacity: 1;
+    visibility: visible;
+    transform: translateX(-50%) translateY(6px);
+}
+
+/* 在 tab 与菜单之间留一条透明缓冲带，避免悬浮移动时菜单闪烁消失 */
+#navbar .nav-dropdown-menu::before {
+    content: "";
+    position: absolute;
+    top: -12px;
+    left: 0;
+    right: 0;
+    height: 12px;
+}
+
+#navbar .nav-dropdown-menu li {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+#navbar .nav-dropdown-menu a {
+    display: block;
+    padding: 9px 20px;
+    font-size: 14px;
+    font-weight: 500;
+    line-height: 1.4;
+    white-space: nowrap;
+    color: #334155;
+    text-decoration: none;
+    transition: background 0.2s ease, color 0.2s ease;
+}
+
+#navbar .nav-dropdown-menu a:hover {
+    background: #F1F5F9;
+    color: #0EA5E9;
+}
