@@ -2573,6 +2573,10 @@ h6 {
         background: #ffffff !important;
         backdrop-filter: none !important;
         -webkit-backdrop-filter: none !important;
+        /* 首页头部带 animation + will-change 会被提升为合成层，部分手机浏览器对其渲染会发灰；
+           移动端一并关掉动画与 will-change，让它和其它页一样是普通白色层。 */
+        animation: none !important;
+        will-change: auto !important;
     }
 
     /* 改版页头部为浅色背景，关闭态汉堡图标需深色才可见（基础为白色会隐形）。
