@@ -16,8 +16,8 @@
         gtag('config', 'G-XEN8DSJX72');
     </script>
     <script src="./assets/vendor/sql/sql-wasm.js"></script>
-    <script src="./assets/js/db/db.js"></script>
-    <script src="./assets/js/db/activity.js"></script>
+    <script src="./assets/js/db/db.js?v=20260621-fix15"></script>
+    <script src="./assets/js/db/activity.js?v=20260621-fix15"></script>
 
     <meta charset="utf-8">
     <!-- 设置视口，使页面在不同设备上自适应屏幕宽度，初始缩放比例为1.0 -->
@@ -44,11 +44,11 @@
     <link href="assets/vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet">
     <link href="assets/vendor/glightbox/css/glightbox.min.css" rel="stylesheet">
     <link href="assets/vendor/swiper/swiper-bundle.min.css" rel="stylesheet">
-    <link href="assets/css/style.css" rel="stylesheet">
-    <link href="assets/css/activity.css" rel="stylesheet">
+    <link href="assets/css/style.css?v=20260621-fix15" rel="stylesheet">
+    <link href="assets/css/activity.css?v=20260621-fix15" rel="stylesheet">
 
     <!-- Template Main CSS File -->
-    <script src="assets/js/jquery.min.js"></script>
+    <script src="assets/js/jquery.min.js?v=20260621-fix15"></script>
 </head>
 
 <body>
@@ -66,8 +66,22 @@
         <nav id="navbar" class="navbar order-last order-lg-0">
             <ul>
                 <li><a class="nav-link scrollto" href="index.html">首页</a></li>
-                <li><a class="nav-link scrollto active" href="activity_category.html">学术活动</a></li>
-                <li><a class="nav-link scrollto" href="project.html">开源项目</a></li>
+                <li class="nav-dropdown"><a class="nav-link scrollto active" href="activity_category.html">学术活动</a>
+                    <ul class="nav-dropdown-menu">
+                        <li><a href="activity_category.html?type=0">全部</a></li>
+                        <li><a href="activity_category.html?type=1">年度大会</a></li>
+                        <li><a href="activity_category.html?type=2">学术研讨会</a></li>
+                        <li><a href="activity_category.html?type=3">学术Talk</a></li>
+                    </ul>
+                </li>
+                <li class="nav-dropdown"><a class="nav-link scrollto" href="project.html">开源项目</a>
+                    <ul class="nav-dropdown-menu">
+                        <li><a href="project.html?cat=全部">全部</a></li>
+                        <li><a href="project.html?cat=课程笔记">课程笔记</a></li>
+                        <li><a href="project.html?cat=实用工具">实用工具</a></li>
+                        <li><a href="project.html?cat=论文写作">论文写作</a></li>
+                    </ul>
+                </li>
                 <li><a class="nav-link scrollto" href="committee.html">社区成员</a></li>
                 <li><a class="nav-link scrollto" href="#footer">联系我们</a></li>
             </ul>
@@ -293,6 +307,9 @@
             <div class="copyright">
                 &copy; Copyright <strong>TheEvent</strong>. Modified by <strong>MLNLP</strong>. All Rights Reserved
             </div>
+            <div class="credits site-maintainers">
+                网站建设与维护（排名不分先后）：上海交通大学 范静如 · 新西兰奥克兰大学 包启明 · 中南大学 周璟轩
+            </div>
             <div class="credits">
                 Designed by <a href="https://bootstrapmade.com/">BootstrapMade</a>
             </div>
@@ -310,7 +327,7 @@
     <script src="assets/vendor/php-email-form/validate.js"></script>
 
     <!-- Template Main JS File -->
-    <script src="assets/js/main.js"></script>
+    <script src="assets/js/main.js?v=20260621-fix15"></script>
 
 </main>
 </body>

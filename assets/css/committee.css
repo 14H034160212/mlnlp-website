@@ -665,3 +665,88 @@ body.committee-page::after {
         opacity: 1 !important;
     }
 }
+
+/* ===== 历届成员入口 / 返回入口（任务1：折叠跳转） ===== */
+.committee-former-entry {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 14px;
+    margin: 18px auto 64px;
+    text-align: center;
+}
+
+.committee-former-entry-tip {
+    margin: 0;
+    font-size: 14px;
+    color: var(--committee-muted);
+}
+
+.committee-former-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 12px 26px;
+    border-radius: 999px;
+    font-size: 15px;
+    font-weight: 600;
+    color: #fff;
+    text-decoration: none;
+    background: linear-gradient(135deg, var(--committee-accent) 0%, var(--committee-accent-dark) 100%);
+    box-shadow: var(--committee-shadow);
+    transition: transform 0.3s var(--committee-ease), box-shadow 0.3s var(--committee-ease);
+}
+
+.committee-former-link:hover {
+    color: #fff;
+    transform: translateY(-2px);
+    box-shadow: var(--committee-shadow-hover);
+}
+
+.committee-former-link i {
+    transition: transform 0.3s var(--committee-ease);
+}
+
+.committee-former-link:hover i {
+    transform: translateX(4px);
+}
+
+.committee-back-entry {
+    display: flex;
+    justify-content: center;
+    margin: 4px auto 40px;
+}
+
+.committee-back-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 22px;
+    border-radius: 999px;
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--committee-accent-dark);
+    text-decoration: none;
+    background: var(--committee-card);
+    border: 1px solid var(--committee-line);
+    transition: transform 0.3s var(--committee-ease), background 0.3s var(--committee-ease);
+}
+
+.committee-back-link:hover {
+    color: var(--committee-accent-dark);
+    transform: translateY(-2px);
+    background: rgba(255, 255, 255, 0.7);
+}
+
+.committee-back-link i {
+    transition: transform 0.3s var(--committee-ease);
+}
+
+.committee-back-link:hover i {
+    transform: translateX(-4px);
+}
+
+/* 页脚网站建设署名（任务4） */
+.site-maintainers {
+    opacity: 0.85;
+}

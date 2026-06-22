@@ -1,15 +1,3 @@
-function buildActivityPeople(segments) {
-    const people = Array.isArray(segments) ? segments : [];
-    const chair = people.find((guest) => Number(guest.role) === 1) || null;
-
-    return {
-        chair,
-        conferenceChair: chair,
-        hosts: people.filter((guest) => Number(guest.role) === 2),
-        speakers: people.filter((guest) => Number(guest.role) === 3)
-    };
-}
-
 async function findActivity(type, typeId) {
     // 查询活动信息
     const activityQuery = `
@@ -28,58 +16,59 @@ async function findActivity(type, typeId) {
         where activity_type = ${type}
           and activity_id = ${typeId};
     `;
-    const activitySegments = await execute(activitySegmentQuery) || [];
+    const activitySegments = await execute(activitySegmentQuery);
 
     return {
         "activity": activity,
-        "activitySegments": activitySegments,
-        "activityPeople": buildActivityPeople(activitySegments)
+        "activitySegments": activitySegments
     };
 }
 
-async function findActivitiesByPage(page, size){
+async function findActivitiesByPage(page, size, type){
     // 计算偏移量
     const offset = size * (page - 1);
+    // 可选按类型过滤（type 为 0 / 空时表示全部）
+    const whereClause = type ? `where type = ${type}` : ``;
     // 按页查询活动信息
     const ActivityQuery =  `
         select *
         from activity
+        ${whereClause}
         order by time desc
         limit ${size} offset ${offset};
     `;
     const activities = await execute(ActivityQuery);
 
-    const guestList = [];
-    const activityPeopleList = [];
+    const guestList = []
     if (activities != null) {
-        for (const activity of activities) {
+        for (activity of activities) {
             const activityType = activity["type"];
             const activityTypeId = activity["type_id"];
 
             const guestQuery = `
-                select id, name, organization, title, role
+                select id, name, organization
                 from activity_guest
                 where activity_type = ${activityType}
                   and activity_id = ${activityTypeId};
             `;
-            const segments = await execute(guestQuery) || [];
+            const segments = await execute(guestQuery);
 
             guestList.push(segments);
-            activityPeopleList.push(buildActivityPeople(segments));
         }
     }
 
     return {
         "activities": activities,
-        "guestList": guestList,
-        "activityPeopleList": activityPeopleList
+        "guestList": guestList
     }
 }
 
-async function findActivityCount(){
+async function findActivityCount(type){
+    const whereClause = type ? `where type = ${type}` : ``;
     const query =  `
         select count(*)
-        from activity;
+        from activity
+        ${whereClause};
     `;
 
     const count = await execute(query);

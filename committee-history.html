@@ -24,7 +24,7 @@
     <meta content="width=device-width, initial-scale=1.0" name="viewport">
 
     <!-- 页面标题 -->
-    <title>社区成员</title>
+    <title>全部成员</title>
     <!-- 页面描述 -->
     <meta content="" name="description">
     <!-- 页面关键词 -->
@@ -82,14 +82,12 @@
                         <li><a href="project.html?cat=论文写作">论文写作</a></li>
                     </ul>
                 </li>
-                <li><a class="nav-link scrollto active" href="#">社区成员</a></li>
+                <li><a class="nav-link scrollto active" href="committee.html">社区成员</a></li>
                 <li><a class="nav-link scrollto" href="#footer">联系我们</a></li>
             </ul>
             <!-- 移动端导航切换图标 -->
             <i class="bi bi-list mobile-nav-toggle"></i>
         </nav>
-        <!-- 注册按钮 -->
-<!--        <a class="buy-tickets scrollto" href="https://bscc2011.mikecrm.com/BZTCX5g" target="_blank">注册</a>-->
 
     </div>
 </header>
@@ -101,21 +99,20 @@
     <section id="committee" class="committee-page-section">
         <div class="container committee-shell">
             <div id="committee-title" class="section-header committee-html committee-hero">
-                <p class="committee-eyebrow">Community Members</p>
-                <h2>社区成员</h2>
-                <p class="committee-subtitle">衷心感谢每一位成员为 MLNLP 社区的学术交流、开源协作与知识传播做出的贡献。</p>
+                <p class="committee-eyebrow">All Community Members</p>
+                <h2>全部成员</h2>
+                <p class="committee-subtitle">MLNLP 社区历届委员与秘书处成员一览，感谢每一位成员的贡献。</p>
                 <span id="committee-title-tip" class="sort-pill">按照姓名排序</span>
             </div>
 
-            <div id="committee-container" class="section team">
+            <div class="committee-back-entry">
+                <a class="committee-back-link" href="committee.html">
+                    <i class="bi bi-arrow-left" aria-hidden="true"></i>
+                    返回当届成员
+                </a>
             </div>
 
-            <div class="committee-former-entry">
-                <p class="committee-former-entry-tip">浏览 MLNLP 社区全部委员与秘书处成员（含历届）</p>
-                <a class="committee-former-link" href="committee-history.html">
-                    浏览全部成员
-                    <i class="bi bi-arrow-right" aria-hidden="true"></i>
-                </a>
+            <div id="committee-former-container" class="section team committee-container-bottom">
             </div>
         </div>
 
@@ -125,54 +122,60 @@
 <script>
     // 页面加载完成后执行获取数据的操作
     window.onload = async function () {
-        await initCommittee();
+        await initCommitteeHistory();
     };
 
     /**
-     * 初始化社区成员信息
+     * 初始化全部成员信息（展示所有届，含当届与历届）
      */
-    async function initCommittee() {
+    async function initCommitteeHistory() {
         try {
-            // 发起请求获取 seminar 数据
             const result = await findMembersByGroup();
 
             let html_str_list = [];
 
             for (let i = 0; i < result.length; i++) {
-                const members = result[i][0];
+                const membersList = result[i];
 
                 html_str_list.push(`
-                <section class="member-group">
-                    <h2 class="team-chair">${members[0].role}</h2>
-                    <h2 class="team-term">（${members[0].term}）</h2>
-                    <div class="member-grid schedule-item">
+                <section class="member-group member-group-former">
             `);
 
-                for (const member of members) {
+                for (let j = 0; j < membersList.length; j++) {
+                    const members = result[i][j];
                     html_str_list.push(`
-                    <div class="schedule-card">
-                        <a class="member" target="_blank" href="${member.homepage_url}">
-                            <div class="avatar-wrapper">
-                                <div class="avatar-inner speaker">
-                                    <img loading="lazy" src="${member.avatar_url}" alt="${member.name}">
-                                </div>
-                            </div>
-                            <div class="member-info">
-                                <h4>${member.name}</h4>
-                                <span>${member.organization}</span>
-                            </div>
-                        </a>
-                    </div>
+                        <h2 class="team-chair">${membersList[0][0].role}</h2>
+                        <h2 class="team-term">（${members[0].term}）</h2>
+                        <div class="member-grid schedule-item">
                 `);
+
+                    for (const member of members) {
+                        html_str_list.push(`
+                        <div class="schedule-card">
+                            <a class="member" target="_blank" href="${member.homepage_url}">
+                                <div class="avatar-wrapper">
+                                    <div class="avatar-inner speaker">
+                                        <img loading="lazy" src="${member.avatar_url}" alt="${member.name}">
+                                    </div>
+                                </div>
+                                <div class="member-info">
+                                    <h4>${member.name}</h4>
+                                    <span>${member.organization}</span>
+                                </div>
+                            </a>
+                        </div>
+                    `);
+                    }
+                    html_str_list.push(`</div>`);
                 }
 
-                html_str_list.push(`</div></section>`);
+                html_str_list.push(`</section>`);
             }
 
-            const html_str = html_str_list.join('');
-            $("#committee-container").html(html_str);
+            const html_str2 = html_str_list.join('');
+            $("#committee-former-container").html(html_str2);
         } catch (error) {
-            console.error('Error fetching seminar data:', error);
+            console.error('Error fetching committee history data:', error);
         }
     }
 </script>
@@ -231,9 +234,6 @@
         </div>
         <div class="credits site-maintainers">
             网站建设与维护（排名不分先后）：上海交通大学 范静如 · 新西兰奥克兰大学 包启明 · 中南大学 周璟轩
-        </div>
-        <div class="credits">
-            Designed by <a href="https://bootstrapmade.com/">BootstrapMade</a>
         </div>
     </div>
 </footer>

@@ -9,12 +9,21 @@
     let autoSlideInterval = null;
     let featuredActivities = [];
     let totalPagesCache = 1;
+    let currentType = 0; // 0 表示全部
 
     const typeMap = {
         1: "MLNLP Conference",
         2: "MLNLP Seminar",
         3: "MLNLP Academic Talk"
     };
+
+    // 活动分类 Tab（任务3：仅对社区自主活动按类型分类展示）
+    const TYPE_TABS = [
+        { value: 0, label: "全部" },
+        { value: 1, label: "年度大会" },
+        { value: 2, label: "学术研讨会" },
+        { value: 3, label: "学术Talk" }
+    ];
 
     const escapeHtml = (value) => String(value ?? "").replace(/[&<>"']/g, (char) => ({
         "&": "&amp;",
@@ -172,7 +181,7 @@
     async function loadPage(totalPages, currentPage) {
         try {
             const page = Number(currentPage) || 1;
-            const result = await findActivitiesByPage(page, PAGE_SIZE);
+            const result = await findActivitiesByPage(page, PAGE_SIZE, currentType);
             const activities = result.activities || [];
 
             const html = activities.map((activity, index) => {
@@ -247,7 +256,7 @@
 
     async function getTotalPages() {
         try {
-            const count = await findActivityCount();
+            const count = await findActivityCount(currentType);
             return Math.ceil(count / PAGE_SIZE);
         } catch (error) {
             console.error("Error fetching total pages:", error);
@@ -257,7 +266,7 @@
 
     async function initSlides() {
         try {
-            const result = await findActivitiesByPage(1, PAGE_SIZE);
+            const result = await findActivitiesByPage(1, PAGE_SIZE, currentType);
             featuredActivities = result.activities || [];
 
             const slidesHtml = featuredActivities.map((activity, index) => `
@@ -401,9 +410,35 @@
         });
     }
 
+    function renderTypeTabs() {
+        const container = document.getElementById("activity-type-tabs");
+        if (!container) {
+            return;
+        }
+
+        container.innerHTML = TYPE_TABS.map((tab) =>
+            `<button type="button" class="activity-tab${tab.value === currentType ? " active" : ""}" role="tab" onclick="filterActivityType(${tab.value}, this)">${escapeHtml(tab.label)}</button>`
+        ).join("");
+    }
+
+    async function filterActivityType(type, btn) {
+        currentType = Number(type) || 0;
+
+        document.querySelectorAll("#activity-type-tabs .activity-tab").forEach((b) => b.classList.remove("active"));
+        if (btn) {
+            btn.classList.add("active");
+        }
+
+        totalPagesCache = await getTotalPages();
+        await loadPage(totalPagesCache, 1);
+        // 页面内点击分类只更新下方列表、不重渲染顶部轮播、不滚动，
+        // 保证顶部不动、页面不位移（仅下方内容变化）。
+    }
+
     window.loadPage = loadPage;
     window.currentSlide = currentSlide;
     window.prevSlide = prevSlide;
+    window.filterActivityType = filterActivityType;
     window.nextSlide = function () {
         nextSlide();
         resetAutoSlide();
@@ -413,9 +448,25 @@
         const params = new URLSearchParams(window.location.search);
         const page = Number(params.get("page")) || 1;
 
+        // 支持通过 URL ?type= 直接筛选（导航下拉跳转，含「全部」type=0）
+        const hasTypeParam = params.has("type");
+        const typeParam = Number(params.get("type"));
+        if ([1, 2, 3].includes(typeParam)) {
+            currentType = typeParam;
+        }
+
         initEntranceAnimations();
+        renderTypeTabs();
         totalPagesCache = await getTotalPages();
         await initSlides();
         await loadPage(totalPagesCache, page);
+
+        // 从导航下拉带分类跳转过来时（含「全部」），自动滚动到「往期活动」列表区
+        if (hasTypeParam) {
+            const target = document.getElementById("schedule");
+            if (target) {
+                setTimeout(() => target.scrollIntoView({ behavior: "smooth", block: "start" }), 250);
+            }
+        }
     });
 })();

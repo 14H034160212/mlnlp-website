@@ -17,8 +17,8 @@
     gtag('config', 'G-XEN8DSJX72');
   </script>
   <script src="./assets/vendor/sql/sql-wasm.js"></script>
-  <script src="./assets/js/db/db.js"></script>
-  <script src="./assets/js/db/project.js"></script>
+  <script src="./assets/js/db/db.js?v=20260621-fix15"></script>
+  <script src="./assets/js/db/project.js?v=20260621-fix15"></script>
 
   <meta charset="utf-8">
   <!-- 设置视口，使页面在不同设备上自适应屏幕宽度，初始缩放比例为1.0 -->
@@ -45,11 +45,11 @@
   <link href="assets/vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet">
   <link href="assets/vendor/glightbox/css/glightbox.min.css" rel="stylesheet">
   <link href="assets/vendor/swiper/swiper-bundle.min.css" rel="stylesheet">
-  <link href="assets/css/style.css" rel="stylesheet">
-  <link href="assets/css/project.css?v=20260616-projects-equal-cards" rel="stylesheet">
+  <link href="assets/css/style.css?v=20260621-fix15" rel="stylesheet">
+  <link href="assets/css/project.css?v=20260621-fix15" rel="stylesheet">
 
   <!-- Template Main CSS File -->
-  <script src="assets/js/jquery.min.js"></script>
+  <script src="assets/js/jquery.min.js?v=20260621-fix15"></script>
 
 </head>
 
@@ -67,8 +67,22 @@
     <nav id="navbar" class="navbar order-last order-lg-0">
       <ul>
         <li><a class="nav-link scrollto" href="index.html">首页</a></li>
-        <li><a class="nav-link scrollto" href="activity_category.html">学术活动</a></li>
-        <li><a class="nav-link scrollto active" href="project.html">开源项目</a></li>
+        <li class="nav-dropdown"><a class="nav-link scrollto" href="activity_category.html">学术活动</a>
+                    <ul class="nav-dropdown-menu">
+                        <li><a href="activity_category.html?type=0">全部</a></li>
+                        <li><a href="activity_category.html?type=1">年度大会</a></li>
+                        <li><a href="activity_category.html?type=2">学术研讨会</a></li>
+                        <li><a href="activity_category.html?type=3">学术Talk</a></li>
+                    </ul>
+                </li>
+        <li class="nav-dropdown"><a class="nav-link scrollto active" href="project.html">开源项目</a>
+                    <ul class="nav-dropdown-menu">
+                        <li><a href="project.html?cat=全部">全部</a></li>
+                        <li><a href="project.html?cat=课程笔记">课程笔记</a></li>
+                        <li><a href="project.html?cat=实用工具">实用工具</a></li>
+                        <li><a href="project.html?cat=论文写作">论文写作</a></li>
+                    </ul>
+                </li>
         <li><a class="nav-link scrollto" href="committee.html">社区成员</a></li>
         <li><a class="nav-link scrollto" href="#footer">联系我们</a></li>
       </ul>
@@ -88,6 +102,8 @@
         <h2>开源项目</h2>
       </div>
 
+      <div id="project-tabs" class="project-tabs" role="tablist" aria-label="项目分类"></div>
+
       <div id="project-container" class="section team">
         <div id="project-container-data" class="project-grid"></div>
       </div>
@@ -101,6 +117,39 @@
   // 页面加载完成后执行获取数据的操作
   window.onload = async function () {
     await initProjects();
+  };
+
+  // 项目分类映射（按 GitHub 仓库名归类）
+  const PROJECT_CATEGORY = {
+    'MLNLP-World/MIT-Linear-Algebra-Notes': '课程笔记',
+    'MLNLP-World/DeepLearning-MuLi-Notes': '课程笔记',
+    'MLNLP-World/Deep_Learning_Notes': '课程笔记',
+    'MLNLP-World/NLP-Course-Chinese': '课程笔记',
+    'MLNLP-World/Pytorch-Deep-Learning-Practice-Notes': '课程笔记',
+    'MLNLP-World/LLMs-from-scratch-CN': '课程笔记',
+    'MLNLP-World/MyArxiv': '实用工具',
+    'MLNLP-World/SimBiber': '实用工具',
+    'MLNLP-World/AI-Paper-Collector': '实用工具',
+    'MLNLP-World/Top-AI-Conferences-Paper-with-Code': '实用工具',
+    'MLNLP-World/Paper-Picture-Writing-Code': '论文写作',
+    'MLNLP-World/Paper-Writing-Tips': '论文写作'
+  };
+  const PROJECT_CATEGORIES = ['全部', '课程笔记', '实用工具', '论文写作'];
+
+  function categoryOf(project) {
+    return PROJECT_CATEGORY[project.github_repo] || '其他';
+  }
+
+  // Tab 切换：按分类过滤项目卡片
+  window.filterProjects = function (category, btn) {
+    document.querySelectorAll('#project-tabs .project-tab').forEach((b) => b.classList.remove('active'));
+    if (btn) {
+      btn.classList.add('active');
+    }
+    document.querySelectorAll('#project-container-data .project-card').forEach((card) => {
+      const show = category === '全部' || card.dataset.category === category;
+      card.classList.toggle('is-hidden', !show);
+    });
   };
 
   /**
@@ -122,14 +171,16 @@
 
       for (let i = 0; i < result.length; i++) {
         const project = result[i];
+        const category = categoryOf(project);
         html_str_list.push(`
-          <article class="project-card" data-repo="${project.github_repo}">
+          <article class="project-card" data-repo="${project.github_repo}" data-category="${category}">
             <a class="project-link" target="_blank" href="${project.html_url}" aria-label="View ${project.title} on GitHub">
               <div class="project-card__top">
                 <div class="project-github-icon" aria-hidden="true">
                   <i class="bi bi-github"></i>
                 </div>
                 <h3 class="project-name">${project.title}</h3>
+                <span class="project-tag">${category}</span>
               </div>
 
               <p class="project-description">${project.description}</p>
@@ -156,6 +207,22 @@
 
       const parentContainer = document.getElementById('project-container-data');
       parentContainer.innerHTML = html_str;
+
+      // 渲染分类 Tab
+      const tabsHtml = PROJECT_CATEGORIES.map((c, i) =>
+        `<button type="button" class="project-tab${i === 0 ? ' active' : ''}" role="tab" onclick="filterProjects('${c}', this)">${c}</button>`
+      ).join('');
+      document.getElementById('project-tabs').innerHTML = tabsHtml;
+
+      // 支持通过 URL ?cat= 直接筛选（导航下拉跳转）
+      const cat = new URLSearchParams(window.location.search).get('cat');
+      if (cat && PROJECT_CATEGORIES.includes(cat) && cat !== '全部') {
+        document.querySelectorAll('#project-tabs .project-tab').forEach((b) => {
+          if (b.textContent.trim() === cat) {
+            filterProjects(cat, b);
+          }
+        });
+      }
 
     } catch (error) {
       console.error('Error fetching seminar data:', error);
@@ -217,6 +284,9 @@
     <div class="copyright">
       &copy; Copyright <strong>TheEvent</strong>. Modified by <strong>MLNLP</strong>. All Rights Reserved
     </div>
+    <div class="credits site-maintainers">
+        网站建设与维护（排名不分先后）：上海交通大学 范静如 · 新西兰奥克兰大学 包启明 · 中南大学 周璟轩
+    </div>
     <div class="credits">
       Designed by <a href="https://bootstrapmade.com/">BootstrapMade</a>
     </div>
@@ -234,8 +304,8 @@
 <script src="assets/vendor/php-email-form/validate.js"></script>
 
 <!-- Template Main JS File -->
-<script src="assets/js/main.js?v=20260615-projects-no-inner-motion"></script>
-<script src="assets/js/project-page.js?v=20260615-projects-no-inner-motion"></script>
+<script src="assets/js/main.js?v=20260621-fix15"></script>
+<script src="assets/js/project-page.js?v=20260621-fix15"></script>
 
 </body>
 

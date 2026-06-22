@@ -1,0 +1,28 @@
+# Cloudflare Pages 响应头配置
+# 对 HTML 页面禁用缓存（no-store），避免运营商/代理等中间缓存缓存旧页面导致看到旧版。
+# 静态资源（assets 下的 css/js/img）不在此列，仍按文件名 + ?v= 版本号正常缓存。
+
+/
+  Cache-Control: no-store
+/index.html
+  Cache-Control: no-store
+/committee
+  Cache-Control: no-store
+/committee.html
+  Cache-Control: no-store
+/committee-history
+  Cache-Control: no-store
+/committee-history.html
+  Cache-Control: no-store
+/project
+  Cache-Control: no-store
+/project.html
+  Cache-Control: no-store
+/activity
+  Cache-Control: no-store
+/activity.html
+  Cache-Control: no-store
+/activity_category
+  Cache-Control: no-store
+/activity_category.html
+  Cache-Control: no-store

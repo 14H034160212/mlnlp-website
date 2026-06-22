@@ -17,10 +17,10 @@
         gtag('config', 'G-XEN8DSJX72');
     </script>
     <script src="./assets/vendor/sql/sql-wasm.js"></script>
-    <script src="./assets/js/db/db.js"></script>
-    <script src="./assets/js/db/activity.js"></script>
-    <script src="./assets/js/db/member.js"></script>
-    <script src="./assets/js/db/project.js"></script>
+    <script src="./assets/js/db/db.js?v=20260621-fix15"></script>
+    <script src="./assets/js/db/activity.js?v=20260621-fix15"></script>
+    <script src="./assets/js/db/member.js?v=20260621-fix15"></script>
+    <script src="./assets/js/db/project.js?v=20260621-fix15"></script>
 
     <meta charset="utf-8">
     <!-- 设置视口，使页面在不同设备上自适应屏幕宽度，初始缩放比例为1.0 -->
@@ -47,13 +47,13 @@
     <link href="assets/vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet">
     <link href="assets/vendor/glightbox/css/glightbox.min.css" rel="stylesheet">
     <link href="assets/vendor/swiper/swiper-bundle.min.css" rel="stylesheet">
-    <link href="assets/css/style.css" rel="stylesheet">
-    <link href="assets/css/committee.css" rel="stylesheet">
-    <link href="assets/css/activity_category.css" rel="stylesheet">
-    <link href="assets/css/index.css?v=20260616-home-content-tooltip" rel="stylesheet">
+    <link href="assets/css/style.css?v=20260621-fix15" rel="stylesheet">
+    <link href="assets/css/committee.css?v=20260621-fix15" rel="stylesheet">
+    <link href="assets/css/activity_category.css?v=20260621-fix15" rel="stylesheet">
+    <link href="assets/css/index.css?v=20260621-fix15" rel="stylesheet">
 
     <!-- Template Main CSS File -->
-    <script src="assets/js/jquery.min.js"></script>
+    <script src="assets/js/jquery.min.js?v=20260621-fix15"></script>
 
 </head>
 
@@ -74,8 +74,22 @@
         <nav id="navbar" class="navbar order-last order-lg-0">
             <ul>
                 <li><a class="nav-link active" href="index.html">首页</a></li>
-                <li><a class="nav-link" href="activity_category.html">学术活动</a></li>
-                <li><a class="nav-link" href="project.html">开源项目</a></li>
+                <li class="nav-dropdown"><a class="nav-link" href="activity_category.html">学术活动</a>
+                    <ul class="nav-dropdown-menu">
+                        <li><a href="activity_category.html?type=0">全部</a></li>
+                        <li><a href="activity_category.html?type=1">年度大会</a></li>
+                        <li><a href="activity_category.html?type=2">学术研讨会</a></li>
+                        <li><a href="activity_category.html?type=3">学术Talk</a></li>
+                    </ul>
+                </li>
+                <li class="nav-dropdown"><a class="nav-link" href="project.html">开源项目</a>
+                    <ul class="nav-dropdown-menu">
+                        <li><a href="project.html?cat=全部">全部</a></li>
+                        <li><a href="project.html?cat=课程笔记">课程笔记</a></li>
+                        <li><a href="project.html?cat=实用工具">实用工具</a></li>
+                        <li><a href="project.html?cat=论文写作">论文写作</a></li>
+                    </ul>
+                </li>
                 <li><a class="nav-link" href="committee.html">社区成员</a></li>
                 <li><a class="nav-link scrollto" href="#footer">联系我们</a></li>
             </ul>
@@ -215,7 +229,7 @@
                     <div class="home-member-grid">
             `);
 
-                for (const member of members.slice(0, 6)) {
+                for (const member of members) {
                     html_str_list.push(`
                     <a class="member" target="_blank" href="${member.homepage_url}">
                         <div class="avatar-wrapper">
@@ -396,6 +410,22 @@
         startAutoSlide();
     }
 
+    // 项目分类映射（与开源项目专页保持一致）
+    const HOME_PROJECT_CATEGORY = {
+        'MLNLP-World/MIT-Linear-Algebra-Notes': '课程笔记',
+        'MLNLP-World/DeepLearning-MuLi-Notes': '课程笔记',
+        'MLNLP-World/Deep_Learning_Notes': '课程笔记',
+        'MLNLP-World/NLP-Course-Chinese': '课程笔记',
+        'MLNLP-World/Pytorch-Deep-Learning-Practice-Notes': '课程笔记',
+        'MLNLP-World/LLMs-from-scratch-CN': '课程笔记',
+        'MLNLP-World/MyArxiv': '实用工具',
+        'MLNLP-World/SimBiber': '实用工具',
+        'MLNLP-World/AI-Paper-Collector': '实用工具',
+        'MLNLP-World/Top-AI-Conferences-Paper-with-Code': '实用工具',
+        'MLNLP-World/Paper-Picture-Writing-Code': '论文写作',
+        'MLNLP-World/Paper-Writing-Tips': '论文写作'
+    };
+
     async function initHomeProjects() {
         try {
             const result = await findAllProjects();
@@ -410,13 +440,14 @@
             }
 
             const html = projects.map((project) => `
-                <article class="home-project-card">
+                <article class="home-project-card" data-category="${HOME_PROJECT_CATEGORY[project.github_repo] || '其他'}">
                     <a class="project-link" target="_blank" href="${project.html_url}" aria-label="View ${project.title} on GitHub">
                         <div class="project-card__top">
                             <div class="project-github-icon" aria-hidden="true">
                                 <i class="bi bi-github"></i>
                             </div>
                             <h3 class="project-name">${project.title}</h3>
+                            <span class="project-tag">${HOME_PROJECT_CATEGORY[project.github_repo] || '其他'}</span>
                         </div>
 
                         <p class="project-description">${project.description}</p>
@@ -536,6 +567,9 @@
         <div class="copyright">
             &copy; Copyright <strong>TheEvent</strong>. Modified by <strong>MLNLP</strong>. All Rights Reserved
         </div>
+        <div class="credits site-maintainers">
+            网站建设与维护（排名不分先后）：上海交通大学 范静如 · 新西兰奥克兰大学 包启明 · 中南大学 周璟轩
+        </div>
         <div class="credits">
             Designed by <a href="https://bootstrapmade.com/">BootstrapMade</a>
         </div>
@@ -553,8 +587,8 @@
 <script src="assets/vendor/php-email-form/validate.js"></script>
 
 <!-- Template Main JS File -->
-<script src="assets/js/main.js"></script>
-<script src="assets/js/home.js"></script>
+<script src="assets/js/main.js?v=20260621-fix15"></script>
+<script src="assets/js/home.js?v=20260621-fix15"></script>
 
 </body>
 
