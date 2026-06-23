@@ -1169,10 +1169,6 @@ body.home-page::after {
     -webkit-line-clamp: 4;
 }
 
-.home-page .home-event-desc[data-full-content] {
-    cursor: help;
-}
-
 .home-page .home-event-meta {
     display: grid;
     gap: 12px;

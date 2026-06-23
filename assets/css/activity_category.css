@@ -389,10 +389,6 @@ body.activity-page::after {
     -webkit-line-clamp: 4;
 }
 
-.activity-page .event-subtopic[data-full-content] {
-    cursor: help;
-}
-
 .activity-page .event-meta-list {
     display: grid;
     gap: 12px;
@@ -764,10 +760,6 @@ body.activity-page::after {
     text-align: left;
     -webkit-box-orient: vertical;
     -webkit-line-clamp: 2;
-}
-
-.activity-page .activity-category-data-description[data-full-content] {
-    cursor: help;
 }
 
 .activity-page #pagination {

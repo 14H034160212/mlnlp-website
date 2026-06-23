@@ -174,7 +174,7 @@
         setText("event-topic", topic.topic);
         setText("event-subtopic", summary.summary);
         summaryNode?.setAttribute("data-full-content", summary.full);
-        summaryNode?.setAttribute("title", summary.full);
+        summaryNode?.removeAttribute("title");
         summaryNode?.setAttribute("tabindex", "0");
         setText("event-time", formatEventTime(activity));
 
@@ -212,7 +212,7 @@
                                         <p class="activity-category-data-day">${escapeHtml(date.day)}</p>
                                     </div>
                                 </div>
-                                <p class="activity-category-data-description" tabindex="0" title="${escapeHtml(description.full)}" data-full-content="${escapeHtml(description.full)}">${escapeHtml(description.summary)}</p>
+                                <p class="activity-category-data-description" tabindex="0" data-full-content="${escapeHtml(description.full)}">${escapeHtml(description.summary)}</p>
                             </div>
                         </div>
                     </article>
