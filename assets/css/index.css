@@ -1231,6 +1231,38 @@ body.home-page::after {
     color: var(--home-subtle);
 }
 
+.home-page .home-event-button {
+    justify-content: center;
+    min-height: 44px;
+    padding: 0 18px;
+    border-radius: 999px;
+    font-weight: 600;
+    transition: transform 280ms var(--home-ease), box-shadow 280ms var(--home-ease), border-color 280ms ease, background-color 280ms ease, color 280ms ease;
+}
+
+.home-page .home-event-button--primary {
+    color: #FFFFFF;
+    background: linear-gradient(135deg, #0EA5E9, #6366F1);
+    box-shadow: 0 14px 30px rgba(14, 165, 233, 0.18);
+}
+
+.home-page .home-event-button--secondary {
+    color: #0369A1;
+    background: rgba(255, 255, 255, 0.56);
+    border: 1px solid rgba(14, 165, 233, 0.18);
+}
+
+.home-page .home-event-button:hover {
+    color: #FFFFFF;
+    transform: translateY(-2px);
+}
+
+.home-page .home-event-button--secondary:hover {
+    color: #0369A1;
+    background: rgba(255, 255, 255, 0.82);
+    border-color: rgba(56, 189, 248, 0.32);
+}
+
 .home-page .home-event-poster-stage .prev-arrow,
 .home-page .home-event-poster-stage .next-arrow {
     position: absolute;
