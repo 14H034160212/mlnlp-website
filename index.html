@@ -17,9 +17,9 @@
         gtag('config', 'G-XEN8DSJX72');
     </script>
     <script src="./assets/vendor/sql/sql-wasm.js"></script>
-    <script src="./assets/js/db/db.js?v=20260621-fix15"></script>
+    <script src="./assets/js/db/db.js?v=20260623-mlnlp2025"></script>
     <script src="./assets/js/db/activity.js?v=20260621-fix15"></script>
-    <script src="./assets/js/db/member.js?v=20260621-fix15"></script>
+    <script src="./assets/js/db/member.js?v=20260622-student-executive"></script>
     <script src="./assets/js/db/project.js?v=20260621-fix15"></script>
 
     <meta charset="utf-8">
@@ -47,10 +47,10 @@
     <link href="assets/vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet">
     <link href="assets/vendor/glightbox/css/glightbox.min.css" rel="stylesheet">
     <link href="assets/vendor/swiper/swiper-bundle.min.css" rel="stylesheet">
-    <link href="assets/css/style.css?v=20260621-fix15" rel="stylesheet">
-    <link href="assets/css/committee.css?v=20260621-fix15" rel="stylesheet">
-    <link href="assets/css/activity_category.css?v=20260621-fix15" rel="stylesheet">
-    <link href="assets/css/index.css?v=20260621-fix15" rel="stylesheet">
+    <link href="assets/css/style.css?v=20260622-logo-v2" rel="stylesheet">
+    <link href="assets/css/committee.css?v=20260623-round-avatar-transparent" rel="stylesheet">
+    <link href="assets/css/activity_category.css?v=20260622-logo-v2" rel="stylesheet">
+    <link href="assets/css/index.css?v=20260623-round-avatar-transparent" rel="stylesheet">
 
     <!-- Template Main CSS File -->
     <script src="assets/js/jquery.min.js?v=20260621-fix15"></script>
@@ -117,12 +117,13 @@
 
             <div class="home-hero__summary">
                 <p>
-                    <strong>MLNLP 社区</strong>是国内外知名自然语言处理社区，覆盖 NLP 硕博生、高校老师以及企业研究人员，愿景是促进学术界、产业界和初学者之间的交流。
+                    <strong>MLNLP 社区</strong>是国内外知名的机器学习算法与自然语言处理社区，覆盖人工智能、大模型等领域硕博生、高校老师以及企业研究人员，愿景是促进学术界、产业界和初学者之间的交流。
                 </p>
             </div>
 
             <div class="home-hero__actions">
                 <a class="home-hero__button home-hero__button--primary" href="activity_category.html">查看学术活动</a>
+                <a class="home-hero__button home-hero__button--secondary" href="project.html">查看社区开源项目</a>
                 <a class="home-hero__button home-hero__button--secondary" href="committee.html">了解社区成员</a>
             </div>
         </div>
@@ -209,28 +210,46 @@
     };
 
     const homeActivities = [];
+    const HOME_DEFAULT_ACTIVITY = {
+        type: 2,
+        typeId: 26
+    };
+    const STUDENT_EXECUTIVE_COMMITTEE = [
+        { name: "涂耿", title: "组长" },
+        { name: "王奕辰", title: "副组长" },
+        { name: "蒋官语", title: "副组长" },
+        { name: "张宸源", title: "副组长" },
+        { name: "余青臣", title: "副组长" },
+        { name: "乔硕斐", title: "副组长" },
+        { name: "范静如", title: "副组长" },
+        { name: "包启明", title: "副组长" }
+    ];
 
-    /**
-     * 初始化社区成员信息。
-     */
-    async function initCommittee() {
-        try {
-            // 发起请求获取 seminar 数据
-            const result = await findMembersByGroup();
+    function findStudentExecutiveMembers(members) {
+        const memberByName = new Map(members.map((member) => [member.name, member]));
+        const byPinyin = (a, b) => a.pinyin.localeCompare(b.pinyin);
 
-            let html_str_list = [];
+        return STUDENT_EXECUTIVE_COMMITTEE
+            .map((executive) => {
+                const member = memberByName.get(executive.name);
+                return member ? { ...member, executiveTitle: executive.title } : null;
+            })
+            .filter(Boolean)
+            .sort((a, b) => {
+                if (a.executiveTitle === "组长") {
+                    return -1;
+                }
 
-            for (let i = 0; i < result.length; i++) {
-                const members = result[i][0];
+                if (b.executiveTitle === "组长") {
+                    return 1;
+                }
 
-                html_str_list.push(`
-                <div class="home-member-group">
-                    <h3 class="team-chair">${members[0].role}</h3>
-                    <div class="home-member-grid">
-            `);
+                return byPinyin(a, b);
+            });
+    }
 
-                for (const member of members) {
-                    html_str_list.push(`
+    function renderHomeMemberCard(member) {
+        return `
                     <a class="member" target="_blank" href="${member.homepage_url}">
                         <div class="avatar-wrapper">
                             <div class="speaker avatar-inner">
@@ -238,14 +257,74 @@
                             </div>
                         </div>
                         <div class="member-info">
-                            <h4>${member.name}</h4>
+                            <h4>${member.name}${member.executiveTitle ? `（${member.executiveTitle}）` : ""}</h4>
                             <span>${member.organization}</span>
                         </div>
                     </a>
-                `);
+            `;
+    }
+
+    function renderHomeMemberGrid(members) {
+        return `<div class="home-member-grid">${members.map(renderHomeMemberCard).join("")}</div>`;
+    }
+
+    function renderHomeStudentMembers(members) {
+        const executives = findStudentExecutiveMembers(members);
+        const executiveNames = new Set(executives.map((member) => member.name));
+        const otherMembers = members.filter((member) => !executiveNames.has(member.name));
+        const leader = executives.find((member) => member.executiveTitle === "组长");
+        const deputies = executives.filter((member) => member.executiveTitle !== "组长");
+        const html = [];
+
+        if (executives.length) {
+            html.push(`<h4 class="home-member-subtitle">执委会</h4>`);
+            if (leader) {
+                html.push(`<div class="home-member-grid home-member-grid--leader">${renderHomeMemberCard(leader)}</div>`);
+            }
+            if (deputies.length) {
+                html.push(renderHomeMemberGrid(deputies));
+            }
+        }
+
+        if (otherMembers.length) {
+            html.push(`<h4 class="home-member-subtitle">学生委员</h4>`);
+            html.push(renderHomeMemberGrid(otherMembers));
+        }
+
+        return html.join("");
+    }
+
+    /**
+     * 初始化社区成员信息。
+     */
+    async function initCommittee() {
+        try {
+            // 发起请求获取 seminar 数据
+            const result = await findCurrentMembersByGroup();
+
+            let html_str_list = [];
+
+            for (let i = 0; i < result.length; i++) {
+                const members = result[i];
+
+                const role = members[0].role;
+                const term = members[0].term;
+                const groupTitle = role === "学术委员" && term === "首届 · 2021-2023"
+                    ? "创始学术委员"
+                    : role;
+
+                html_str_list.push(`
+                <div class="home-member-group">
+                    <h3 class="team-chair">${groupTitle}<span class="home-member-term">（${term}）</span></h3>
+            `);
+
+                if (role === "学生委员") {
+                    html_str_list.push(renderHomeStudentMembers(members));
+                } else {
+                    html_str_list.push(renderHomeMemberGrid(members));
                 }
 
-                html_str_list.push(`</div></div>`);
+                html_str_list.push(`</div>`);
             }
 
             html_str_list.push(`<div class="home-member-footer"><a class="home-module-link home-member-more" href="committee.html">查看全部成员 <i class="bi bi-arrow-right-short" aria-hidden="true"></i></a></div>`);
@@ -267,9 +346,27 @@
         try {
             // 发起请求获取活动数据
             const result = await findActivitiesByPage(1, 5);
-            const activities = result.activities;
+            const activities = [...result.activities];
+            const defaultSlideIndex = activities.findIndex((activity) =>
+                Number(activity.type) === HOME_DEFAULT_ACTIVITY.type &&
+                Number(activity.type_id) === HOME_DEFAULT_ACTIVITY.typeId
+            );
+
+            if (defaultSlideIndex > 0) {
+                const [defaultActivity] = activities.splice(defaultSlideIndex, 1);
+                activities.unshift(defaultActivity);
+            } else if (defaultSlideIndex < 0) {
+                const defaultResult = await findActivity(HOME_DEFAULT_ACTIVITY.type, HOME_DEFAULT_ACTIVITY.typeId);
+                if (defaultResult && defaultResult.activity) {
+                    if (activities.length >= 5) {
+                        activities.pop();
+                    }
+                    activities.unshift(defaultResult.activity);
+                }
+            }
 
             let html_str = '';
+            homeActivities.length = 0;
             for (let i = 0; i < activities.length; i++) {
                 const activity = activities[i];
                 homeActivities.push({
@@ -277,8 +374,8 @@
                 });
 
                 html_str += `
-                            <a class="home-slide-link" href="${activity.html_url}" aria-label="${activity.title || '查看活动详情'}">
-                                <img src="${activity.cover_url}" alt="${activity.title || 'MLNLP 学术活动'}" class="slide">
+                            <a class="home-slide-link${i === 0 ? ' active' : ''}" href="${activity.html_url}" aria-label="${activity.title || '查看活动详情'}">
+                                <img src="${activity.cover_url}" alt="${activity.title || 'MLNLP 学术活动'}" class="slide${i === 0 ? ' active' : ''}" style="opacity: ${i === 0 ? 1 : 0};">
                             </a>
                         `;
             }
@@ -308,8 +405,13 @@
         }
 
         // 更新索引
-        if (n > slides.length) { slideIndex = 1; }
-        if (n < 1) { slideIndex = slides.length; }
+        if (n > slides.length) {
+            slideIndex = 1;
+        } else if (n < 1) {
+            slideIndex = slides.length;
+        } else {
+            slideIndex = n;
+        }
 
         // 隐藏所有图片
         for (let i = 0; i < slides.length; i++) {
@@ -449,15 +551,15 @@
                 return `${number}`;
             }
 
-            const html = projects.map((project) => `
-                <article class="home-project-card" data-category="${HOME_PROJECT_CATEGORY[project.github_repo] || '其他'}">
-                    <a class="project-link" target="_blank" href="${project.html_url}" aria-label="View ${project.title} on GitHub">
+            function renderHomeProjectCard(project) {
+                return `
+                    <article class="home-project-card" data-category="${HOME_PROJECT_CATEGORY[project.github_repo] || '其他'}">
+                        <a class="project-link" target="_blank" href="${project.html_url}" aria-label="View ${project.title} on GitHub">
                         <div class="project-card__top">
                             <div class="project-github-icon" aria-hidden="true">
                                 <i class="bi bi-github"></i>
                             </div>
                             <h3 class="project-name">${project.title}</h3>
-                            <span class="project-tag">${HOME_PROJECT_CATEGORY[project.github_repo] || '其他'}</span>
                         </div>
 
                         <p class="project-description">${project.description}</p>
@@ -470,56 +572,91 @@
                                 </span>
                                 <span class="project-badge project-badge--forks" data-home-forks-repo="${project.github_repo}">
                                     <i class="bi bi-diagram-2-fill" aria-hidden="true"></i>
-                                    <span data-home-forks-count>--</span>
+                                    <span data-home-forks-count>${formatCount(project.forks)}</span>
                                 </span>
                             </div>
                             <span class="project-cta">View on GitHub <i class="bi bi-arrow-right-short" aria-hidden="true"></i></span>
                         </div>
                     </a>
                 </article>
+                `;
+            }
+
+            const groupedProjects = new Map();
+            projects.forEach((project) => {
+                const category = HOME_PROJECT_CATEGORY[project.github_repo] || '其他';
+                if (!groupedProjects.has(category)) {
+                    groupedProjects.set(category, []);
+                }
+                groupedProjects.get(category).push(project);
+            });
+
+            const orderedCategories = ['课程笔记', '实用工具', '论文写作', '其他']
+                .filter((category) => groupedProjects.has(category));
+
+            const html = orderedCategories.map((category) => `
+                <section class="home-project-category-section" data-category="${category}">
+                    <h3 class="home-project-category-title">${category}</h3>
+                    <div class="home-project-category-grid">
+                        ${groupedProjects.get(category).map(renderHomeProjectCard).join("")}
+                    </div>
+                </section>
             `).join("");
 
             document.getElementById("home-project-grid").innerHTML = html;
-            hydrateHomeProjectForks(formatCount);
+            hydrateHomeProjectStats(formatCount);
         } catch (error) {
             console.error("Error fetching project data:", error);
         }
     }
 
-    function hydrateHomeProjectForks(formatCount) {
-        // 实时从 GitHub 公开 API 拉取 star / fork（同一次请求同时拿到，纯前端、跨平台通用）。
-        // localStorage + 1 小时 TTL 缓存以缓解限流；失败/限流时保留数据库兜底值。
-        const TTL = 60 * 60 * 1000;
-        document.querySelectorAll("[data-home-forks-repo]").forEach(async (badge) => {
-            const repo = badge.getAttribute("data-home-forks-repo");
-            const forkEl = badge.querySelector("[data-home-forks-count]");
-            const card = badge.closest(".home-project-card");
-            const starEl = card ? card.querySelector("[data-home-stars-count]") : null;
+    function hydrateHomeProjectStats(formatCount) {
+        const targets = new Map();
+
+        document.querySelectorAll("[data-home-stars-repo], [data-home-forks-repo]").forEach((badge) => {
+            const repo = badge.getAttribute("data-home-stars-repo") || badge.getAttribute("data-home-forks-repo");
 
             if (!repo) {
                 return;
             }
 
-            const apply = (stars, forks) => {
-                if (starEl && stars !== undefined && stars !== null) {
-                    starEl.textContent = formatCount(stars);
-                }
-                if (forkEl && forks !== undefined && forks !== null) {
-                    forkEl.textContent = formatCount(forks);
-                }
-            };
+            if (!targets.has(repo)) {
+                targets.set(repo, { stars: [], forks: [] });
+            }
 
-            try {
-                const raw = window.localStorage.getItem(`mlnlp:gh:${repo}`);
-                if (raw) {
-                    const cached = JSON.parse(raw);
-                    if (cached && (Date.now() - cached.ts) < TTL) {
-                        apply(cached.stars, cached.forks);
-                        return;
-                    }
-                }
-            } catch (error) {
-                // 忽略缓存读取异常
+            const target = targets.get(repo);
+            const starsCount = badge.querySelector("[data-home-stars-count]");
+            const forksCount = badge.querySelector("[data-home-forks-count]");
+
+            if (starsCount) {
+                target.stars.push(starsCount);
+            }
+
+            if (forksCount) {
+                target.forks.push(forksCount);
+            }
+        });
+
+        function applyStats(target, stats) {
+            if (stats.stars != null) {
+                target.stars.forEach((count) => {
+                    count.textContent = formatCount(stats.stars);
+                });
+            }
+
+            if (stats.forks != null) {
+                target.forks.forEach((count) => {
+                    count.textContent = formatCount(stats.forks);
+                });
+            }
+        }
+
+        targets.forEach(async (target, repo) => {
+            const cacheKey = `mlnlp:home:github-stats:${repo}`;
+            const cachedValue = window.sessionStorage.getItem(cacheKey);
+            if (cachedValue) {
+                applyStats(target, JSON.parse(cachedValue));
+                return;
             }
 
             try {
@@ -529,18 +666,14 @@
                 }
 
                 const data = await response.json();
-                apply(data.stargazers_count, data.forks_count);
-                try {
-                    window.localStorage.setItem(`mlnlp:gh:${repo}`, JSON.stringify({
-                        stars: data.stargazers_count,
-                        forks: data.forks_count,
-                        ts: Date.now()
-                    }));
-                } catch (error) {
-                    // 忽略缓存写入异常
-                }
+                const stats = {
+                    stars: data.stargazers_count,
+                    forks: data.forks_count
+                };
+                window.sessionStorage.setItem(cacheKey, JSON.stringify(stats));
+                applyStats(target, stats);
             } catch (error) {
-                // GitHub 不可达或被限流时，保留兜底值
+                // Keep the database values when GitHub is unavailable or rate-limited.
             }
         });
     }

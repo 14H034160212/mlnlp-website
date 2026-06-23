@@ -95,7 +95,7 @@ body.activity-page::after {
     z-index: 901;
 }
 
-.activity-page #header #logo img {
+.activity-page #header #logo:not(.site-brand) img {
     max-height: 34px;
 }
 
@@ -964,7 +964,7 @@ body.activity-page::after {
         height: 68px;
     }
 
-    .activity-page #header #logo img {
+    .activity-page #header #logo:not(.site-brand) img {
         max-height: 30px;
     }
 

@@ -16,8 +16,8 @@
         gtag('config', 'G-XEN8DSJX72');
     </script>
     <script src="./assets/vendor/sql/sql-wasm.js"></script>
-    <script src="./assets/js/db/db.js?v=20260621-fix15"></script>
-    <script src="./assets/js/db/member.js?v=20260621-fix15"></script>
+    <script src="./assets/js/db/db.js?v=20260623-mlnlp2025"></script>
+    <script src="./assets/js/db/member.js?v=20260622-former-members"></script>
 
     <meta charset="utf-8">
     <!-- 设置视口，使页面在不同设备上自适应屏幕宽度，初始缩放比例为1.0 -->
@@ -46,8 +46,8 @@
     <link href="assets/vendor/swiper/swiper-bundle.min.css" rel="stylesheet">
 
     <!-- Template Main CSS File -->
-    <link href="assets/css/style.css?v=20260621-fix15" rel="stylesheet">
-    <link href="assets/css/committee.css?v=20260621-fix15" rel="stylesheet">
+    <link href="assets/css/style.css?v=20260622-logo-v2" rel="stylesheet">
+    <link href="assets/css/committee.css?v=20260623-round-avatar-transparent" rel="stylesheet">
     <script src="assets/js/jquery.min.js?v=20260621-fix15"></script>
 </head>
 
@@ -58,8 +58,11 @@
     <div class="container-fluid container-xxl d-flex align-items-center">
 
         <!-- 网站 logo -->
-        <div id="logo" class="me-auto row">
-            <a href="index.html" class="scrollto"><img src="assets/img/logo/logo-1.png" alt="" title=""></a>
+        <div id="logo" class="me-auto site-brand">
+            <a href="index.html" aria-label="MLNLP 社区首页">
+                <img src="assets/img/logo/logo.jpeg" alt="MLNLP">
+                <span>MLNLP</span>
+            </a>
         </div>
 
         <!-- 导航栏 -->
@@ -110,67 +113,163 @@
             <div id="committee-container" class="section team">
             </div>
 
-            <div class="committee-former-entry">
-                <p class="committee-former-entry-tip">浏览 MLNLP 社区全部委员与秘书处成员（含历届）</p>
-                <a class="committee-former-link" href="committee-history.html">
-                    浏览全部成员
-                    <i class="bi bi-arrow-right" aria-hidden="true"></i>
-                </a>
+            <div id="committee-former-title" class="section-header committee-html committee-hero">
+                <p class="committee-eyebrow">Former Members</p>
+                <h2>历任成员</h2>
+                <p class="committee-subtitle">感谢历届成员在社区建设、学术活动组织与开源协作中的持续投入。</p>
+                <span class="sort-pill">按照届次与姓名排序</span>
             </div>
+
+            <div id="committee-former-container" class="section team">
+            </div>
+
         </div>
 
     </section>
 </main>
 
 <script>
+    const STUDENT_EXECUTIVE_COMMITTEE = [
+        { name: "涂耿", title: "组长" },
+        { name: "王奕辰", title: "副组长" },
+        { name: "蒋官语", title: "副组长" },
+        { name: "张宸源", title: "副组长" },
+        { name: "余青臣", title: "副组长" },
+        { name: "乔硕斐", title: "副组长" },
+        { name: "范静如", title: "副组长" },
+        { name: "包启明", title: "副组长" }
+    ];
+
+    function findStudentExecutiveMembers(members) {
+        const memberByName = new Map(members.map((member) => [member.name, member]));
+        const byPinyin = (a, b) => a.pinyin.localeCompare(b.pinyin);
+
+        return STUDENT_EXECUTIVE_COMMITTEE
+            .map((executive) => {
+                const member = memberByName.get(executive.name);
+                return member ? { ...member, executiveTitle: executive.title } : null;
+            })
+            .filter(Boolean)
+            .sort((a, b) => {
+                if (a.executiveTitle === "组长") {
+                    return -1;
+                }
+
+                if (b.executiveTitle === "组长") {
+                    return 1;
+                }
+
+                return byPinyin(a, b);
+            });
+    }
+
+    function renderMemberCard(member) {
+        return `
+                        <div class="schedule-card">
+                            <a class="member" target="_blank" href="${member.homepage_url}">
+                                <div class="avatar-wrapper">
+                                    <div class="avatar-inner speaker">
+                                        <img loading="lazy" src="${member.avatar_url}" alt="${member.name}">
+                                    </div>
+                                </div>
+                                <div class="member-info">
+                                    <h4>${member.name}${member.executiveTitle ? `（${member.executiveTitle}）` : ""}</h4>
+                                    <span>${member.organization}</span>
+                                </div>
+                            </a>
+                        </div>
+                    `;
+    }
+
+    function renderMemberGrid(members) {
+        return `
+                    <div class="member-grid schedule-item">
+                        ${members.map(renderMemberCard).join("")}
+                    </div>
+                `;
+    }
+
+    function renderStudentMembers(members) {
+        const executives = findStudentExecutiveMembers(members);
+        const executiveNames = new Set(executives.map((member) => member.name));
+        const otherMembers = members.filter((member) => !executiveNames.has(member.name));
+        const leader = executives.find((member) => member.executiveTitle === "组长");
+        const deputies = executives.filter((member) => member.executiveTitle !== "组长");
+        const html = [];
+
+        if (executives.length) {
+            html.push(`<h3 class="member-subtitle">执委会</h3>`);
+            if (leader) {
+                html.push(`<div class="member-grid member-grid--leader schedule-item">${renderMemberCard(leader)}</div>`);
+            }
+            if (deputies.length) {
+                html.push(renderMemberGrid(deputies));
+            }
+        }
+
+        if (otherMembers.length) {
+            html.push(`<h3 class="member-subtitle">学生委员</h3>`);
+            html.push(renderMemberGrid(otherMembers));
+        }
+
+        return html.join("");
+    }
+
     // 页面加载完成后执行获取数据的操作
     window.onload = async function () {
         await initCommittee();
     };
+
+    function getGroupTitle(members) {
+        return members[0].role === "学术委员" && members[0].term === "首届 · 2021-2023"
+            ? "创始学术委员"
+            : members[0].role;
+    }
+
+    function renderMemberGroups(result) {
+        const htmlList = [];
+
+        for (let i = 0; i < result.length; i++) {
+            const membersList = result[i];
+
+            htmlList.push(`
+                <section class="member-group">
+            `);
+
+            for (let j = 0; j < membersList.length; j++) {
+                const members = membersList[j];
+
+                htmlList.push(`
+                    <h2 class="team-chair">${getGroupTitle(members)}</h2>
+                    <h2 class="team-term">（${members[0].term}）</h2>
+                `);
+
+                if (members[0].role === "学生委员") {
+                    htmlList.push(renderStudentMembers(members));
+                } else {
+                    htmlList.push(renderMemberGrid(members));
+                }
+            }
+
+            htmlList.push(`</section>`);
+        }
+
+        return htmlList.join("");
+    }
 
     /**
      * 初始化社区成员信息
      */
     async function initCommittee() {
         try {
-            // 发起请求获取 seminar 数据
-            const result = await findMembersByGroup();
+            const [currentMembers, formerMembers] = await Promise.all([
+                findCurrentMembersByGroup(),
+                findFormerMembersByGroup()
+            ]);
 
-            let html_str_list = [];
-
-            for (let i = 0; i < result.length; i++) {
-                const members = result[i][0];
-
-                html_str_list.push(`
-                <section class="member-group">
-                    <h2 class="team-chair">${members[0].role}</h2>
-                    <h2 class="team-term">（${members[0].term}）</h2>
-                    <div class="member-grid schedule-item">
-            `);
-
-                for (const member of members) {
-                    html_str_list.push(`
-                    <div class="schedule-card">
-                        <a class="member" target="_blank" href="${member.homepage_url}">
-                            <div class="avatar-wrapper">
-                                <div class="avatar-inner speaker">
-                                    <img loading="lazy" src="${member.avatar_url}" alt="${member.name}">
-                                </div>
-                            </div>
-                            <div class="member-info">
-                                <h4>${member.name}</h4>
-                                <span>${member.organization}</span>
-                            </div>
-                        </a>
-                    </div>
-                `);
-                }
-
-                html_str_list.push(`</div></section>`);
-            }
-
-            const html_str = html_str_list.join('');
-            $("#committee-container").html(html_str);
+            $("#committee-container").html(renderMemberGroups(currentMembers.map((members) => [members])));
+            $("#committee-former-container").html(renderMemberGroups(formerMembers));
+            window.dispatchEvent(new Event("mlnlp:committee-members-rendered"));
         } catch (error) {
             console.error('Error fetching seminar data:', error);
         }
@@ -250,7 +349,7 @@
 
 <!-- Template Main JS File -->
 <script src="assets/js/main.js?v=20260621-fix15"></script>
-<script src="assets/js/committee.js?v=20260621-fix15"></script>
+<script src="assets/js/committee.js?v=20260622-committee-initial-members"></script>
 
 </body>
 

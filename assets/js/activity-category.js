@@ -3,6 +3,10 @@
 
     const PAGE_SIZE = 5;
     const AUTOPLAY_DELAY = 6200;
+    const DEFAULT_FEATURED_ACTIVITY = {
+        type: 2,
+        typeId: 26
+    };
     const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
     let slideIndex = 1;
@@ -268,6 +272,23 @@
         try {
             const result = await findActivitiesByPage(1, PAGE_SIZE, currentType);
             featuredActivities = result.activities || [];
+            const defaultSlideIndex = featuredActivities.findIndex((activity) =>
+                Number(activity.type) === DEFAULT_FEATURED_ACTIVITY.type &&
+                Number(activity.type_id) === DEFAULT_FEATURED_ACTIVITY.typeId
+            );
+
+            if (defaultSlideIndex > 0) {
+                const [defaultActivity] = featuredActivities.splice(defaultSlideIndex, 1);
+                featuredActivities.unshift(defaultActivity);
+            } else if (defaultSlideIndex < 0) {
+                const defaultResult = await findActivity(DEFAULT_FEATURED_ACTIVITY.type, DEFAULT_FEATURED_ACTIVITY.typeId);
+                if (defaultResult && defaultResult.activity) {
+                    if (featuredActivities.length >= PAGE_SIZE) {
+                        featuredActivities.pop();
+                    }
+                    featuredActivities.unshift(defaultResult.activity);
+                }
+            }
 
             const slidesHtml = featuredActivities.map((activity, index) => `
                 <a href="${escapeHtml(activity.html_url)}" class="slide" aria-label="${escapeHtml(activity.title)}">

@@ -218,9 +218,44 @@ h6 {
     max-height: 40px;
 }
 
+#header #logo.site-brand a {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    color: #1f2937;
+    font-size: 16px;
+    font-weight: 700;
+    letter-spacing: 0;
+}
+
+#header #logo.site-brand img {
+    width: 34px;
+    height: 34px;
+    max-height: none;
+    object-fit: cover;
+    border-radius: 8px;
+    box-shadow: 0 6px 16px rgba(15, 23, 42, 0.08);
+}
+
 @media (max-width: 992px) {
     #header #logo img {
         max-height: 30px;
+    }
+
+    #header #logo.site-brand span {
+        font-size: 15px;
+    }
+
+    #header #logo.site-brand img {
+        width: 32px;
+        height: 32px;
+        max-height: none;
+    }
+}
+
+@media (max-width: 575px) {
+    #header #logo.site-brand span {
+        display: none;
     }
 }
 

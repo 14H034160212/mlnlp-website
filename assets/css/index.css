@@ -810,6 +810,7 @@ body.home-page::after {
     display: flex;
     justify-content: center;
     align-items: center;
+    justify-self: center;
     width: 100%;
     height: 100%;
     gap: 4%;
@@ -1111,7 +1112,6 @@ body.home-page::after {
     width: 100%;
     height: 100%;
     object-fit: cover;
-    opacity: 1 !important;
     transition: opacity 620ms var(--home-ease), transform 620ms var(--home-ease);
 }
 
@@ -1312,6 +1312,38 @@ body.home-page::after {
 }
 
 .home-page .home-project-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 48px;
+    width: 100%;
+}
+
+.home-page .home-project-category-section {
+    display: flex;
+    flex-direction: column;
+    gap: 22px;
+    width: 100%;
+}
+
+.home-page .home-project-category-title {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    align-self: flex-start;
+    min-height: 34px;
+    margin: 0;
+    padding: 0 16px;
+    color: var(--home-accent);
+    font-size: 15px;
+    font-weight: 700;
+    line-height: 1;
+    background: rgba(224, 242, 254, 0.82);
+    border: 1px solid rgba(14, 165, 233, 0.22);
+    border-radius: 8px;
+    box-shadow: 0 8px 20px rgba(14, 165, 233, 0.08);
+}
+
+.home-page .home-project-category-grid {
     display: grid;
     grid-template-columns: repeat(2, minmax(0, 1fr));
     grid-auto-rows: 1fr;
@@ -1404,20 +1436,6 @@ body.home-page::after {
     align-items: center;
     gap: 18px;
     min-width: 0;
-}
-
-/* 首页项目卡分类标签（与开源项目专页保持一致） */
-.home-page .home-project-card .project-tag {
-    flex: 0 0 auto;
-    margin-left: auto;
-    padding: 4px 11px;
-    border-radius: 999px;
-    font-size: 12px;
-    font-weight: 600;
-    white-space: nowrap;
-    color: var(--home-accent);
-    background: var(--home-accent-soft);
-    border: 1px solid rgba(14, 165, 233, 0.22);
 }
 
 .home-page .project-github-icon {
@@ -1554,67 +1572,129 @@ body.home-page::after {
     letter-spacing: -0.03em;
 }
 
+.home-page .home-member-term {
+    display: block;
+    margin-top: 8px;
+    color: var(--home-subtle);
+    font-size: 16px;
+    font-weight: 500;
+    letter-spacing: 0;
+}
+
 .home-page .home-member-grid {
     display: grid;
-    grid-template-columns: repeat(3, minmax(0, 260px));
+    grid-template-columns: repeat(3, minmax(0, 286px));
     justify-content: center;
     gap: 40px 48px;
     width: 100%;
 }
 
+.home-page .home-member-grid--leader {
+    grid-template-columns: minmax(0, 286px);
+    margin-bottom: 40px;
+}
+
+.home-page .home-member-subtitle {
+    margin: 0 auto 30px;
+    color: #475569;
+    font-size: 22px;
+    font-weight: 700;
+    line-height: 1.3;
+    text-align: center;
+    letter-spacing: 0;
+}
+
+.home-page .home-member-grid + .home-member-subtitle {
+    margin-top: 56px;
+}
+
 .home-page #committee .team .member,
 .home-page .member {
+    position: relative;
+    isolation: isolate;
     display: flex;
     flex-direction: column;
     align-items: center;
     width: 100%;
-    max-width: 260px;
-    min-height: 250px;
+    max-width: 286px;
+    min-height: 318px;
     margin: 0;
-    padding: 8px 8px 12px;
-    overflow: visible;
+    padding: 14px 14px 18px;
+    overflow: hidden;
     color: inherit;
     text-align: center;
+    text-decoration: none;
     background: transparent;
     border: 0;
     border-radius: 0;
     box-shadow: none;
-    transition: transform 280ms var(--home-ease);
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+    transition: transform 300ms var(--home-ease), border-color 300ms var(--home-ease), box-shadow 300ms var(--home-ease), background 300ms var(--home-ease);
+}
+
+.home-page #committee .team .member::before,
+.home-page .member::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
+    background: transparent;
+    opacity: 0;
+    transition: opacity 300ms var(--home-ease);
+}
+
+.home-page .avatar-wrapper,
+.home-page .member-info {
+    position: relative;
+    z-index: 1;
 }
 
 .home-page #committee .team .member:hover,
 .home-page .member:hover {
     color: inherit;
+    border-color: transparent;
+    box-shadow: none;
     transform: translateY(-6px);
+}
+
+.home-page #committee .team .member:hover::before,
+.home-page .member:hover::before {
+    opacity: 0;
 }
 
 .home-page .avatar-wrapper {
     display: grid;
     place-items: center;
-    width: 150px;
-    height: 150px;
-    padding: 3px;
-    border-radius: 999px;
-    background: linear-gradient(135deg, rgba(14, 165, 233, 0.55), rgba(99, 102, 241, 0.30), rgba(255, 255, 255, 0.75));
-    box-shadow: 0 12px 32px rgba(14, 165, 233, 0.12);
+    width: min(100%, 184px);
+    aspect-ratio: 1 / 1;
+    padding: 0;
+    border-radius: 50%;
+    background: transparent;
+    box-shadow:
+        0 16px 32px rgba(15, 23, 42, 0.10),
+        0 8px 18px rgba(14, 165, 233, 0.10);
     transition: transform 280ms var(--home-ease), box-shadow 280ms var(--home-ease), background 280ms var(--home-ease);
 }
 
 .home-page .member:hover .avatar-wrapper {
-    background: linear-gradient(135deg, rgba(14, 165, 233, 0.68), rgba(99, 102, 241, 0.38), rgba(255, 255, 255, 0.82));
-    box-shadow: 0 16px 38px rgba(14, 165, 233, 0.16);
-    transform: translateY(-4px) scale(1.025);
+    background: transparent;
+    box-shadow:
+        0 24px 44px rgba(15, 23, 42, 0.14),
+        0 12px 28px rgba(14, 165, 233, 0.16);
+    transform: translateY(-5px) perspective(700px) rotateX(3deg) rotateY(-3deg);
 }
 
 .home-page .avatar-wrapper .avatar-inner,
 .home-page .avatar-wrapper .speaker {
-    width: 144px;
-    height: 144px;
+    width: 100%;
+    height: 100%;
     margin: 0;
     overflow: hidden;
     float: none;
     background: transparent;
-    border-radius: 999px;
+    border-radius: 50%;
 }
 
 .home-page .avatar-wrapper .avatar-inner img,
@@ -1624,13 +1704,20 @@ body.home-page::after {
     height: 100%;
     margin: 0;
     object-fit: cover;
-    object-position: center;
+    object-position: center 28%;
+    transform: scale(1);
+    transition: transform 280ms var(--home-ease);
+}
+
+.home-page .member:hover .avatar-wrapper .avatar-inner img,
+.home-page .member:hover .avatar-wrapper .speaker img {
+    transform: scale(1.035);
 }
 
 .home-page #committee .team .member .member-info,
 .home-page .member-info {
     width: 100%;
-    padding: 22px 0 0;
+    padding: 18px 4px 0;
     text-align: center;
 }
 
@@ -1779,20 +1866,27 @@ body.home-page::after {
         flex-direction: column;
     }
 
+    .home-page .home-project-category-grid,
     .home-page .home-member-grid {
         grid-template-columns: 1fr;
         gap: 32px;
     }
 
-    .home-page .avatar-wrapper {
-        width: 118px;
-        height: 118px;
+    .home-page #committee .team .member,
+    .home-page .member {
+        max-width: 320px;
+        min-height: 292px;
     }
 
-    .home-page .avatar-inner,
-    .home-page .speaker {
-        width: 112px;
-        height: 112px;
+    .home-page .avatar-wrapper {
+        width: min(100%, 184px);
+        aspect-ratio: 1 / 1;
+    }
+
+    .home-page .avatar-wrapper .avatar-inner,
+    .home-page .avatar-wrapper .speaker {
+        width: 100%;
+        height: 100%;
     }
 }
 

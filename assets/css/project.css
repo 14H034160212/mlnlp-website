@@ -96,7 +96,7 @@ body.project-page::after {
     z-index: 901;
 }
 
-.project-page #header #logo img {
+.project-page #header #logo:not(.site-brand) img {
     max-height: 34px;
 }
 
@@ -208,14 +208,51 @@ body.project-page::after {
 }
 
 .project-page .project-grid {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 72px;
+    width: 100%;
+    max-width: var(--project-max-width);
+    margin: 0 auto;
+}
+
+.project-page .project-category-section {
+    display: flex;
+    flex-direction: column;
+    gap: 22px;
+    width: 100%;
+}
+
+.project-page .project-category-section.is-hidden {
+    display: none !important;
+}
+
+.project-page .project-category-title {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    align-self: flex-start;
+    min-height: 34px;
+    margin: 0;
+    padding: 0 16px;
+    color: var(--project-accent-dark);
+    font-size: 15px;
+    font-weight: 700;
+    line-height: 1;
+    background: rgba(224, 242, 254, 0.82);
+    border: 1px solid rgba(14, 165, 233, 0.22);
+    border-radius: 8px;
+    box-shadow: 0 8px 20px rgba(14, 165, 233, 0.08);
+}
+
+.project-page .project-category-grid {
     display: grid;
     grid-template-columns: repeat(2, minmax(0, 1fr));
     grid-auto-rows: 1fr;
     align-items: stretch;
     gap: 32px;
     width: 100%;
-    max-width: var(--project-max-width);
-    margin: 0 auto;
 }
 
 .project-page .project-card {
@@ -440,7 +477,7 @@ body.project-page::after {
         height: 68px;
     }
 
-    .project-page #header #logo img {
+    .project-page #header #logo:not(.site-brand) img {
         max-height: 30px;
     }
 
@@ -508,6 +545,10 @@ body.project-page::after {
     }
 
     .project-page .project-grid {
+        gap: 56px;
+    }
+
+    .project-page .project-category-grid {
         gap: 24px;
     }
 
@@ -517,7 +558,7 @@ body.project-page::after {
 }
 
 @media (max-width: 760px) {
-    .project-page .project-grid {
+    .project-page .project-category-grid {
         grid-template-columns: 1fr;
     }
 }
@@ -615,17 +656,4 @@ body.project-page::after {
 
 .project-page .project-card.is-hidden {
     display: none !important;
-}
-
-.project-page .project-tag {
-    flex: 0 0 auto;
-    margin-left: auto;
-    padding: 5px 12px;
-    border-radius: 999px;
-    font-size: 12px;
-    font-weight: 600;
-    white-space: nowrap;
-    color: var(--project-accent-dark);
-    background: rgba(14, 165, 233, 0.12);
-    border: 1px solid rgba(14, 165, 233, 0.22);
 }
