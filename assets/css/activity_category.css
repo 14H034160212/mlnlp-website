@@ -526,12 +526,12 @@ body.activity-page::after {
 
 .activity-page .dots-container {
     position: relative;
-    display: inline-flex;
+    display: flex;
     align-items: center;
     justify-content: center;
     gap: 8px;
-    width: fit-content;
-    margin: 18px auto 0;
+    width: 100%;
+    margin: 18px 0 0;
     padding: 0;
     background: transparent;
     border: 0;
