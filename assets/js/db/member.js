@@ -4,10 +4,9 @@ async function findMembersByGroup() {
     const maxTermResult = await execute('select max(term_id) from dict_member_term');
     const maxTerm = maxTermResult[0]["max(term_id)"];
 
-    const maxRoleResult = await execute('select count(*) from dict_member_role');
-    const maxRole = maxRoleResult[0]["count(*)"];
+    const roles = await findOrderedMemberRoleIds();
 
-    for (let i = 1; i <= maxRole; i++) {
+    for (const i of roles) {
         const membersByRoleList = [];
 
         for (let j = maxTerm; j > 0; j--) {
@@ -30,7 +29,13 @@ async function findCurrentMembersByGroup() {
         select role_id, max(term_id) as term_id
         from member_view
         group by role_id
-        order by role_id;
+        order by
+            case role_id
+                when 1 then 1
+                when 3 then 2
+                when 2 then 3
+                else role_id + 10
+            end;
     `);
 
     for (const role of latestTerms) {
@@ -61,10 +66,9 @@ async function findAllMemberGroups() {
 async function findFormerMembersByGroup() {
     const membersList = [];
 
-    const maxRoleResult = await execute('select count(*) from dict_member_role');
-    const maxRole = maxRoleResult[0]["count(*)"];
+    const roles = await findOrderedMemberRoleIds();
 
-    for (let i = 1; i <= maxRole; i++) {
+    for (const i of roles) {
         const currentTermResult = await execute(`
             select max(term_id) as term_id
             from member_view
@@ -100,6 +104,21 @@ async function findFormerMembersByGroup() {
     }
 
     return membersList;
+}
+
+async function findOrderedMemberRoleIds() {
+    const result = await execute(`
+        select role_id
+        from dict_member_role
+        order by
+            case role_id
+                when 1 then 1
+                when 3 then 2
+                when 2 then 3
+                else role_id + 10
+            end;
+    `);
+    return result.map((row) => row.role_id);
 }
 
 async function findMembersByRoleAndByTerm(role_id, term_id) {
