@@ -60,6 +60,13 @@
 
     function hydrateGithubStats() {
         const targets = new Map();
+        const statsCacheVersion = "20260623-project-forks-v2";
+
+        Object.keys(window.sessionStorage).forEach((key) => {
+            if (key.startsWith("mlnlp:github-stats:") && !key.startsWith(`mlnlp:github-stats:${statsCacheVersion}:`)) {
+                window.sessionStorage.removeItem(key);
+            }
+        });
 
         document.querySelectorAll("[data-stars-repo], [data-forks-repo]").forEach((badge) => {
             const repo = badge.getAttribute("data-stars-repo") || badge.getAttribute("data-forks-repo");
@@ -100,7 +107,7 @@
         }
 
         targets.forEach(async (target, repo) => {
-            const cacheKey = `mlnlp:github-stats:${repo}`;
+            const cacheKey = `mlnlp:github-stats:${statsCacheVersion}:${repo}`;
             const cachedValue = window.sessionStorage.getItem(cacheKey);
             if (cachedValue) {
                 applyStats(target, JSON.parse(cachedValue));
