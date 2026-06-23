@@ -50,7 +50,7 @@
     <link href="assets/css/style.css?v=20260622-logo-v2" rel="stylesheet">
     <link href="assets/css/committee.css?v=20260623-round-avatar-transparent" rel="stylesheet">
     <link href="assets/css/activity_category.css?v=20260622-logo-v2" rel="stylesheet">
-    <link href="assets/css/index.css?v=20260623-round-avatar-transparent" rel="stylesheet">
+    <link href="assets/css/index.css?v=20260623-home-projects-top3" rel="stylesheet">
 
     <!-- Template Main CSS File -->
     <script src="assets/js/jquery.min.js?v=20260621-fix15"></script>
@@ -541,7 +541,7 @@
     async function initHomeProjects() {
         try {
             const result = await findAllProjects();
-            const projects = result.slice(0, 4);
+            const projects = result.slice(0, 3);
 
             function formatCount(value) {
                 const number = Number(value) || 0;
@@ -603,7 +603,12 @@
                 </section>
             `).join("");
 
-            document.getElementById("home-project-grid").innerHTML = html;
+            document.getElementById("home-project-grid").innerHTML = `${html}
+                <a class="home-project-more-link" href="project.html" aria-label="查看更多开源项目">
+                    <span>查看更多开源项目</span>
+                    <i class="bi bi-arrow-right-short" aria-hidden="true"></i>
+                </a>
+            `;
             hydrateHomeProjectStats(formatCount);
         } catch (error) {
             console.error("Error fetching project data:", error);
