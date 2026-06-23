@@ -50,7 +50,7 @@
     <link href="assets/css/style.css?v=20260622-logo-v2" rel="stylesheet">
     <link href="assets/css/committee.css?v=20260623-round-avatar-transparent" rel="stylesheet">
     <link href="assets/css/activity_category.css?v=20260622-logo-v2" rel="stylesheet">
-    <link href="assets/css/index.css?v=20260623-home-event-buttons" rel="stylesheet">
+    <link href="assets/css/index.css?v=20260623-project-category-pill" rel="stylesheet">
 
     <!-- Template Main CSS File -->
     <script src="assets/js/jquery.min.js?v=20260621-fix15"></script>
@@ -122,8 +122,8 @@
             </div>
 
             <div class="home-hero__actions">
-                <a class="home-hero__button home-hero__button--primary" href="activity_category.html">查看学术活动</a>
-                <a class="home-hero__button home-hero__button--secondary" href="project.html">查看社区开源项目</a>
+                <a class="home-hero__button home-hero__button--primary" href="activity_category.html">观看学术活动</a>
+                <a class="home-hero__button home-hero__button--secondary" href="project.html">查看开源项目</a>
                 <a class="home-hero__button home-hero__button--secondary" href="committee.html">了解社区成员</a>
             </div>
         </div>
@@ -541,7 +541,7 @@
     async function initHomeProjects() {
         try {
             const result = await findAllProjects();
-            const projects = result.slice(0, 3);
+            const featuredCategories = ['论文写作', '课程笔记'];
 
             function formatCount(value) {
                 const number = Number(value) || 0;
@@ -552,9 +552,11 @@
             }
 
             function renderHomeProjectCard(project) {
+                const category = HOME_PROJECT_CATEGORY[project.github_repo] || '其他';
                 return `
-                    <article class="home-project-card" data-category="${HOME_PROJECT_CATEGORY[project.github_repo] || '其他'}">
+                    <article class="home-project-card" data-category="${category}">
                         <a class="project-link" target="_blank" href="${project.html_url}" aria-label="View ${project.title} on GitHub">
+                        <span class="project-card-category">${category}</span>
                         <div class="project-card__top">
                             <div class="project-github-icon" aria-hidden="true">
                                 <i class="bi bi-github"></i>
@@ -582,23 +584,18 @@
                 `;
             }
 
-            const groupedProjects = new Map();
-            projects.forEach((project) => {
-                const category = HOME_PROJECT_CATEGORY[project.github_repo] || '其他';
-                if (!groupedProjects.has(category)) {
-                    groupedProjects.set(category, []);
-                }
-                groupedProjects.get(category).push(project);
-            });
+            const featuredGroups = featuredCategories.map((category) => ({
+                category,
+                projects: result
+                    .filter((project) => (HOME_PROJECT_CATEGORY[project.github_repo] || '其他') === category)
+                    .slice(0, 2)
+            })).filter((group) => group.projects.length);
 
-            const orderedCategories = ['课程笔记', '实用工具', '论文写作', '其他']
-                .filter((category) => groupedProjects.has(category));
-
-            const html = orderedCategories.map((category) => `
+            const html = featuredGroups.map(({ category, projects }) => `
                 <section class="home-project-category-section" data-category="${category}">
                     <h3 class="home-project-category-title">${category}</h3>
                     <div class="home-project-category-grid">
-                        ${groupedProjects.get(category).map(renderHomeProjectCard).join("")}
+                        ${projects.map(renderHomeProjectCard).join("")}
                     </div>
                 </section>
             `).join("");

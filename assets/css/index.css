@@ -1382,21 +1382,33 @@ body.home-page::after {
 }
 
 .home-page .home-project-category-title {
+    position: relative;
     display: inline-flex;
     align-items: center;
     justify-content: center;
     align-self: flex-start;
-    min-height: 34px;
+    gap: 8px;
+    min-height: 32px;
     margin: 0;
-    padding: 0 16px;
-    color: var(--home-accent);
-    font-size: 15px;
+    padding: 0 14px 0 12px;
+    color: #334155;
+    font-size: 13px;
     font-weight: 700;
     line-height: 1;
-    background: rgba(224, 242, 254, 0.82);
-    border: 1px solid rgba(14, 165, 233, 0.22);
-    border-radius: 8px;
-    box-shadow: 0 8px 20px rgba(14, 165, 233, 0.08);
+    background: rgba(255, 255, 255, 0.54);
+    border: 1px solid rgba(148, 163, 184, 0.18);
+    border-radius: 999px;
+    box-shadow: 0 10px 28px rgba(15, 23, 42, 0.04);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+}
+
+.home-page .home-project-category-title::before {
+    content: "";
+    width: 18px;
+    height: 2px;
+    background: linear-gradient(90deg, #38BDF8, #6366F1);
+    border-radius: 999px;
 }
 
 .home-page .home-project-category-grid {
@@ -1482,6 +1494,28 @@ body.home-page::after {
     color: inherit;
 }
 
+.home-page .project-card-category {
+    position: absolute;
+    top: 24px;
+    right: 28px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 28px;
+    max-width: 128px;
+    padding: 0 10px;
+    overflow: hidden;
+    color: #0369A1;
+    font-size: 12px;
+    font-weight: 700;
+    line-height: 1;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    background: rgba(224, 242, 254, 0.66);
+    border: 1px solid rgba(14, 165, 233, 0.16);
+    border-radius: 999px;
+}
+
 .home-page .project-link:hover,
 .home-page .project-link:focus {
     color: inherit;
@@ -1492,6 +1526,7 @@ body.home-page::after {
     align-items: center;
     gap: 18px;
     min-width: 0;
+    padding-right: 118px;
 }
 
 .home-page .project-github-icon {
@@ -1915,6 +1950,17 @@ body.home-page::after {
 
     .home-page .project-link {
         padding: 26px 24px;
+    }
+
+    .home-page .project-card-category {
+        top: 18px;
+        right: 20px;
+        max-width: 112px;
+    }
+
+    .home-page .project-card__top {
+        padding-top: 34px;
+        padding-right: 0;
     }
 
     .home-page .project-meta {
