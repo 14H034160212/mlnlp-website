@@ -2213,6 +2213,15 @@ h6 {
     color: #ddd;
 }
 
+#footer .credits a {
+    color: #FDE68A;
+    font-weight: 600;
+}
+
+#footer .credits a:hover {
+    color: #FFFFFF;
+}
+
 .end-time {
     color: rgb(123, 121, 143);
 }
