@@ -132,3 +132,29 @@
 .segment-1-layout .segment-cover{
     margin: 0 auto;
 }
+
+.activity-page.activity-detail-page #schedule {
+    padding: 0 24px 120px;
+}
+
+.activity-page.activity-detail-page #activity-content {
+    max-width: 1140px;
+}
+
+.activity-page.activity-detail-page #activity-content .section-header {
+    max-width: none;
+}
+
+.activity-page.activity-detail-page #activity-bg {
+    z-index: 0;
+}
+
+.activity-page.activity-detail-page #activity-data-cover-bg {
+    opacity: 0.92;
+}
+
+@media (max-width: 575px) {
+    .activity-page.activity-detail-page #schedule {
+        padding: 0 16px 88px;
+    }
+}

@@ -50,7 +50,7 @@
     <link href="assets/css/style.css?v=20260625-footer-credit" rel="stylesheet">
     <link href="assets/css/committee.css?v=20260623-round-avatar-transparent" rel="stylesheet">
     <link href="assets/css/activity_category.css?v=20260622-logo-v2" rel="stylesheet">
-    <link href="assets/css/index.css?v=20260623-project-category-pill" rel="stylesheet">
+    <link href="assets/css/index.css?v=20260625-activity-replay-badge" rel="stylesheet">
 
     <!-- Template Main CSS File -->
     <script src="assets/js/jquery.min.js?v=20260621-fix15"></script>
@@ -374,10 +374,16 @@
                     ...activity
                 });
 
+                const replayLink = activity.video_url
+                    ? `<a class="home-activity-replay" href="${activity.video_url}" target="_blank" rel="noopener noreferrer" aria-label="观看 ${activity.title || 'MLNLP 学术活动'} 回放"><i class="bi bi-play-circle" aria-hidden="true"></i><span>观看回放</span></a>`
+                    : "";
                 html_str += `
-                            <a class="home-slide-link${i === 0 ? ' active' : ''}" href="${activity.html_url}" aria-label="${activity.title || '查看活动详情'}">
-                                <img src="${activity.cover_url}" alt="${activity.title || 'MLNLP 学术活动'}" class="slide${i === 0 ? ' active' : ''}" style="opacity: ${i === 0 ? 1 : 0};">
-                            </a>
+                            <div class="home-slide-link${i === 0 ? ' active' : ''}">
+                                <a class="home-slide-detail-link" href="${activity.html_url}" aria-label="${activity.title || '查看活动详情'}">
+                                    <img src="${activity.cover_url}" alt="${activity.title || 'MLNLP 学术活动'}" class="slide${i === 0 ? ' active' : ''}" style="opacity: ${i === 0 ? 1 : 0};">
+                                </a>
+                                ${replayLink}
+                            </div>
                         `;
             }
             $("#slides-container").html(html_str);

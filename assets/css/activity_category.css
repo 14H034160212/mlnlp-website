@@ -317,11 +317,57 @@ body.activity-page::after {
     transform: scale(1);
 }
 
+.activity-page .activity-slide-detail-link {
+    position: absolute;
+    inset: 0;
+    display: block;
+}
+
 .activity-page .slide img {
     display: block;
     width: 100%;
     height: 100%;
     object-fit: cover;
+}
+
+.activity-page .activity-replay-button {
+    position: absolute;
+    z-index: 3;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    min-height: 34px;
+    padding: 0 12px;
+    color: #FFFFFF;
+    font-size: 13px;
+    font-weight: 700;
+    line-height: 1;
+    background: rgba(15, 23, 42, 0.72);
+    border: 1px solid rgba(255, 255, 255, 0.24);
+    border-radius: 999px;
+    box-shadow: 0 12px 30px rgba(15, 23, 42, 0.22);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+    transition: transform 240ms var(--activity-ease), background-color 240ms ease, box-shadow 240ms var(--activity-ease);
+}
+
+.activity-page .activity-replay-button:hover {
+    color: #FFFFFF;
+    background: rgba(3, 105, 161, 0.9);
+    box-shadow: 0 16px 34px rgba(14, 165, 233, 0.24);
+    transform: translateY(-1px);
+}
+
+.activity-page .activity-replay-button i {
+    font-size: 15px;
+    line-height: 1;
+}
+
+.activity-page .activity-slide-replay,
+.activity-page .activity-card-replay {
+    top: 18px;
+    right: 18px;
 }
 
 .activity-page .event-info-card {
@@ -627,6 +673,7 @@ body.activity-page::after {
 }
 
 .activity-page .activity-category-box {
+    position: relative;
     align-items: stretch;
     width: 100%;
     margin: 0;
@@ -1099,6 +1146,18 @@ body.activity-page::after {
 
     .activity-page .event-poster-frame {
         border-radius: 20px;
+    }
+
+    .activity-page .activity-replay-button {
+        min-height: 32px;
+        padding: 0 10px;
+        font-size: 12px;
+    }
+
+    .activity-page .activity-slide-replay,
+    .activity-page .activity-card-replay {
+        top: 14px;
+        right: 14px;
     }
 
     .activity-page .event-info-card h2 {

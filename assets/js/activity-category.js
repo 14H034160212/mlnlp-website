@@ -192,9 +192,13 @@
                 const date = formatListDate(activity.time);
                 const description = getEventSummary(activity, 120);
                 const typeLabel = typeMap[activity.type] || "MLNLP Event";
+                const replayLink = activity.video_url
+                    ? `<a class="activity-replay-button activity-card-replay" href="${escapeHtml(activity.video_url)}" target="_blank" rel="noopener noreferrer" aria-label="观看 ${escapeHtml(activity.title)} 回放"><i class="bi bi-play-circle" aria-hidden="true"></i><span>观看回放</span></a>`
+                    : "";
 
                 return `
                     <article class="row activity-category-box">
+                        ${replayLink}
                         <a href="${escapeHtml(activity.html_url)}" class="col-12 col-md-5 activity-category-cover-box" aria-label="${escapeHtml(activity.title)}">
                             <img loading="lazy" src="${escapeHtml(activity.cover_url)}" alt="${escapeHtml(activity.title)}">
                         </a>
@@ -290,11 +294,20 @@
                 }
             }
 
-            const slidesHtml = featuredActivities.map((activity, index) => `
-                <a href="${escapeHtml(activity.html_url)}" class="slide" aria-label="${escapeHtml(activity.title)}">
-                    <img src="${escapeHtml(activity.cover_url)}" alt="${escapeHtml(activity.title)}">
-                </a>
-            `).join("");
+            const slidesHtml = featuredActivities.map((activity, index) => {
+                const replayLink = activity.video_url
+                    ? `<a class="activity-replay-button activity-slide-replay" href="${escapeHtml(activity.video_url)}" target="_blank" rel="noopener noreferrer" aria-label="观看 ${escapeHtml(activity.title)} 回放"><i class="bi bi-play-circle" aria-hidden="true"></i><span>观看回放</span></a>`
+                    : "";
+
+                return `
+                    <div class="slide" aria-label="${escapeHtml(activity.title)}">
+                        <a href="${escapeHtml(activity.html_url)}" class="activity-slide-detail-link" aria-label="${escapeHtml(activity.title)}">
+                            <img src="${escapeHtml(activity.cover_url)}" alt="${escapeHtml(activity.title)}">
+                        </a>
+                        ${replayLink}
+                    </div>
+                `;
+            }).join("");
 
             const dotsHtml = featuredActivities.map((activity, index) => `
                 <button class="dot" type="button" onclick="currentSlide(${index + 1})" aria-label="查看活动 ${index + 1}: ${escapeHtml(activity.title)}"></button>
