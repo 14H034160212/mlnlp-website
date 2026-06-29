@@ -17,7 +17,7 @@
     gtag('config', 'G-XEN8DSJX72');
   </script>
   <script src="./assets/vendor/sql/sql-wasm.js"></script>
-  <script src="./assets/js/db/db.js?v=20260623-project-forks-v2"></script>
+  <script src="./assets/js/db/db.js?v=20260629-project-rebuttal-tips"></script>
   <script src="./assets/js/db/project.js?v=20260621-fix15"></script>
 
   <meta charset="utf-8">
@@ -81,9 +81,9 @@
         <li class="nav-dropdown"><a class="nav-link scrollto active" href="project.html">开源项目</a>
                     <ul class="nav-dropdown-menu">
                         <li><a href="project.html?cat=全部">全部</a></li>
+                        <li><a href="project.html?cat=论文写作">论文写作</a></li>
                         <li><a href="project.html?cat=课程笔记">课程笔记</a></li>
                         <li><a href="project.html?cat=实用工具">实用工具</a></li>
-                        <li><a href="project.html?cat=论文写作">论文写作</a></li>
                     </ul>
                 </li>
         <li><a class="nav-link scrollto" href="committee.html">社区成员</a></li>
@@ -136,6 +136,7 @@
     'MLNLP-World/Top-AI-Conferences-Paper-with-Code': '实用工具',
     'MLNLP-World/Paper-Picture-Writing-Code': '论文写作',
     'MLNLP-World/Paper-Writing-Tips': '论文写作',
+    'MLNLP-World/Paper-Rebuttal-Tips': '论文写作',
     'MLNLP-World/gpu-watchdog': '实用工具',
     'MLNLP-World/Overleaf-Bib-Helper': '实用工具',
     'MLNLP-World/Academic-Resume-Template': '论文写作',
@@ -144,10 +145,9 @@
     'MLNLP-World/minimind-notes': '课程笔记',
     'MLNLP-World/Reinforcement-Learning-Comic-Notes': '课程笔记',
     'MLNLP-World/reasoning-from-scratch-CN': '课程笔记',
-    'MLNLP-World/MachineLearning2025Spring--Notes': '课程笔记',
-    'MLNLP-World/Top-Conference-WeChat-Group': '论文写作'
+    'MLNLP-World/MachineLearning2025Spring--Notes': '课程笔记'
   };
-  const PROJECT_CATEGORIES = ['全部', '课程笔记', '实用工具', '论文写作'];
+  const PROJECT_CATEGORIES = ['全部', '论文写作', '课程笔记', '实用工具'];
 
   function categoryOf(project) {
     return PROJECT_CATEGORY[project.github_repo] || '其他';

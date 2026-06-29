@@ -16,7 +16,7 @@
         gtag('config', 'G-XEN8DSJX72');
     </script>
     <script src="./assets/vendor/sql/sql-wasm.js"></script>
-    <script src="./assets/js/db/db.js?v=20260623-project-forks-v2"></script>
+    <script src="./assets/js/db/db.js?v=20260629-project-rebuttal-tips"></script>
     <script src="./assets/js/db/member.js?v=20260623-member-secretariat-order"></script>
 
     <meta charset="utf-8">
@@ -47,7 +47,7 @@
 
     <!-- Template Main CSS File -->
     <link href="assets/css/style.css?v=20260625-footer-credit" rel="stylesheet">
-    <link href="assets/css/committee.css?v=20260623-round-avatar-transparent" rel="stylesheet">
+    <link href="assets/css/committee.css?v=20260629-zengjingjie-avatar" rel="stylesheet">
     <script src="assets/js/jquery.min.js?v=20260621-fix15"></script>
 </head>
 
@@ -80,9 +80,9 @@
                 <li class="nav-dropdown"><a class="nav-link scrollto" href="project.html">开源项目</a>
                     <ul class="nav-dropdown-menu">
                         <li><a href="project.html?cat=全部">全部</a></li>
+                        <li><a href="project.html?cat=论文写作">论文写作</a></li>
                         <li><a href="project.html?cat=课程笔记">课程笔记</a></li>
                         <li><a href="project.html?cat=实用工具">实用工具</a></li>
-                        <li><a href="project.html?cat=论文写作">论文写作</a></li>
                     </ul>
                 </li>
                 <li><a class="nav-link scrollto active" href="#">社区成员</a></li>
@@ -164,12 +164,13 @@
     }
 
     function renderMemberCard(member) {
+        const avatarClass = getAvatarClass(member.avatar_url);
         return `
                         <div class="schedule-card">
                             <a class="member" target="_blank" href="${member.homepage_url}">
                                 <div class="avatar-wrapper">
                                     <div class="avatar-inner speaker">
-                                        <img loading="lazy" src="${member.avatar_url}" alt="${member.name}">
+                                        <img loading="lazy" src="${member.avatar_url}" alt="${member.name}" class="${avatarClass}">
                                     </div>
                                 </div>
                                 <div class="member-info">
@@ -187,6 +188,16 @@
                         ${members.map(renderMemberCard).join("")}
                     </div>
                 `;
+    }
+
+    function getAvatarClass(avatarUrl) {
+        const filename = (avatarUrl || "")
+            .split("/")
+            .pop()
+            .split(".")[0]
+            .replace(/[^a-zA-Z0-9_-]/g, "");
+
+        return filename ? `avatar-${filename}` : "";
     }
 
     function renderStudentMembers(members) {

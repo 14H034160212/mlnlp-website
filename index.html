@@ -17,7 +17,7 @@
         gtag('config', 'G-XEN8DSJX72');
     </script>
     <script src="./assets/vendor/sql/sql-wasm.js"></script>
-    <script src="./assets/js/db/db.js?v=20260623-project-forks-v2"></script>
+    <script src="./assets/js/db/db.js?v=20260629-project-rebuttal-tips"></script>
     <script src="./assets/js/db/activity.js?v=20260621-fix15"></script>
     <script src="./assets/js/db/member.js?v=20260623-member-secretariat-order"></script>
     <script src="./assets/js/db/project.js?v=20260621-fix15"></script>
@@ -50,7 +50,7 @@
     <link href="assets/css/style.css?v=20260625-footer-credit" rel="stylesheet">
     <link href="assets/css/committee.css?v=20260623-round-avatar-transparent" rel="stylesheet">
     <link href="assets/css/activity_category.css?v=20260622-logo-v2" rel="stylesheet">
-    <link href="assets/css/index.css?v=20260625-activity-replay-badge" rel="stylesheet">
+    <link href="assets/css/index.css?v=20260629-zengjingjie-avatar" rel="stylesheet">
 
     <!-- Template Main CSS File -->
     <script src="assets/js/jquery.min.js?v=20260621-fix15"></script>
@@ -85,9 +85,9 @@
                 <li class="nav-dropdown"><a class="nav-link" href="project.html">开源项目</a>
                     <ul class="nav-dropdown-menu">
                         <li><a href="project.html?cat=全部">全部</a></li>
+                        <li><a href="project.html?cat=论文写作">论文写作</a></li>
                         <li><a href="project.html?cat=课程笔记">课程笔记</a></li>
                         <li><a href="project.html?cat=实用工具">实用工具</a></li>
-                        <li><a href="project.html?cat=论文写作">论文写作</a></li>
                     </ul>
                 </li>
                 <li><a class="nav-link" href="committee.html">社区成员</a></li>
@@ -163,6 +163,7 @@
                         </div>
                         <div class="home-event-actions">
                             <a class="home-module-link home-event-button home-event-button--primary" id="home-event-link" href="activity_category.html">查看详情 <i class="bi bi-arrow-right-short" aria-hidden="true"></i></a>
+                            <a class="home-module-link home-event-button home-event-button--secondary home-activity-replay" id="home-event-replay-link" href="#" target="_blank" rel="noopener noreferrer" hidden><i class="bi bi-play-circle" aria-hidden="true"></i><span>观看回放</span></a>
                             <a class="home-module-link home-event-button home-event-button--secondary" href="activity_category.html">更多活动</a>
                         </div>
                     </aside>
@@ -249,11 +250,12 @@
     }
 
     function renderHomeMemberCard(member) {
+        const avatarClass = getAvatarClass(member.avatar_url);
         return `
                     <a class="member" target="_blank" href="${member.homepage_url}">
                         <div class="avatar-wrapper">
                             <div class="speaker avatar-inner">
-                                <img loading="lazy" src="${member.avatar_url}" alt="${member.name}">
+                                <img loading="lazy" src="${member.avatar_url}" alt="${member.name}" class="${avatarClass}">
                             </div>
                         </div>
                         <div class="member-info">
@@ -262,6 +264,16 @@
                         </div>
                     </a>
             `;
+    }
+
+    function getAvatarClass(avatarUrl) {
+        const filename = (avatarUrl || "")
+            .split("/")
+            .pop()
+            .split(".")[0]
+            .replace(/[^a-zA-Z0-9_-]/g, "");
+
+        return filename ? `avatar-${filename}` : "";
     }
 
     function renderHomeMemberGrid(members) {
@@ -374,15 +386,11 @@
                     ...activity
                 });
 
-                const replayLink = activity.video_url
-                    ? `<a class="home-activity-replay" href="${activity.video_url}" target="_blank" rel="noopener noreferrer" aria-label="观看 ${activity.title || 'MLNLP 学术活动'} 回放"><i class="bi bi-play-circle" aria-hidden="true"></i><span>观看回放</span></a>`
-                    : "";
                 html_str += `
                             <div class="home-slide-link${i === 0 ? ' active' : ''}">
                                 <a class="home-slide-detail-link" href="${activity.html_url}" aria-label="${activity.title || '查看活动详情'}">
                                     <img src="${activity.cover_url}" alt="${activity.title || 'MLNLP 学术活动'}" class="slide${i === 0 ? ' active' : ''}" style="opacity: ${i === 0 ? 1 : 0};">
                                 </a>
-                                ${replayLink}
                             </div>
                         `;
             }
@@ -502,6 +510,15 @@
         descNode.setAttribute("tabindex", "0");
         document.getElementById("home-event-time").textContent = time;
         document.getElementById("home-event-link").setAttribute("href", activity.html_url || "activity_category.html");
+        const replayLink = document.getElementById("home-event-replay-link");
+        if (activity.video_url) {
+            replayLink.href = activity.video_url;
+            replayLink.setAttribute("aria-label", `观看 ${title} 回放`);
+            replayLink.hidden = false;
+        } else {
+            replayLink.hidden = true;
+            replayLink.removeAttribute("aria-label");
+        }
     }
 
     // 自动轮播
@@ -533,6 +550,7 @@
         'MLNLP-World/Top-AI-Conferences-Paper-with-Code': '实用工具',
         'MLNLP-World/Paper-Picture-Writing-Code': '论文写作',
         'MLNLP-World/Paper-Writing-Tips': '论文写作',
+        'MLNLP-World/Paper-Rebuttal-Tips': '论文写作',
         'MLNLP-World/gpu-watchdog': '实用工具',
         'MLNLP-World/Overleaf-Bib-Helper': '实用工具',
         'MLNLP-World/Academic-Resume-Template': '论文写作',
@@ -541,8 +559,7 @@
         'MLNLP-World/minimind-notes': '课程笔记',
         'MLNLP-World/Reinforcement-Learning-Comic-Notes': '课程笔记',
         'MLNLP-World/reasoning-from-scratch-CN': '课程笔记',
-        'MLNLP-World/MachineLearning2025Spring--Notes': '课程笔记',
-        'MLNLP-World/Top-Conference-WeChat-Group': '论文写作'
+        'MLNLP-World/MachineLearning2025Spring--Notes': '课程笔记'
     };
 
     async function initHomeProjects() {

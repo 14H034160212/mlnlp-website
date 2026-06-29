@@ -420,6 +420,7 @@ body.committee-page::after {
     float: none;
     border-radius: 50%;
     background: transparent;
+    clip-path: circle(50% at 50% 50%);
 }
 
 .committee-page #committee .schedule-item .speaker img,
@@ -432,6 +433,19 @@ body.committee-page::after {
     object-position: center 28%;
     transform: scale(1);
     transition: transform 280ms var(--committee-ease);
+}
+
+.committee-page #committee .schedule-item .avatar-inner.speaker img,
+.committee-page #committee .schedule-item .avatar-inner img,
+.committee-page .avatar-wrapper .avatar-inner img {
+    width: 100%;
+    height: 100%;
+    margin-left: 0;
+    border-radius: 50%;
+}
+
+.committee-page .avatar-wrapper .avatar-inner img.avatar-zengjingjie {
+    object-position: center 18%;
 }
 
 .committee-page .member:hover .avatar-inner img {
