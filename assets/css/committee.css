@@ -431,7 +431,7 @@ body.committee-page::after {
     margin: 0;
     object-fit: cover;
     object-position: center 28%;
-    transform: scale(1);
+    transform: translateY(var(--avatar-shift-y, 0)) scale(var(--avatar-scale, 1));
     transition: transform 280ms var(--committee-ease);
 }
 
@@ -445,11 +445,27 @@ body.committee-page::after {
 }
 
 .committee-page .avatar-wrapper .avatar-inner img.avatar-zengjingjie {
-    object-position: center 18%;
+    --avatar-scale: 1.22;
+    --avatar-shift-y: -24px;
+    object-position: center 24%;
+}
+
+.committee-page .avatar-wrapper .avatar-inner img.avatar-tugeng {
+    width: 100%;
+    height: 100%;
+    aspect-ratio: 1 / 1;
+    border-radius: 50%;
+    clip-path: circle(50% at 50% 50%);
+    object-fit: cover;
+    object-position: center 20%;
 }
 
 .committee-page .member:hover .avatar-inner img {
-    transform: scale(1.035);
+    transform: translateY(var(--avatar-shift-y, 0)) scale(var(--avatar-hover-scale, 1.035));
+}
+
+.committee-page .member:hover .avatar-inner img.avatar-zengjingjie {
+    --avatar-hover-scale: 1.26;
 }
 
 .committee-page #committee .team .member .member-info,
