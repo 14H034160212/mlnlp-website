@@ -2063,16 +2063,24 @@ h6 {
     padding: 60px 0 30px 0;
 }
 
+#footer .footer-top .row {
+    row-gap: 28px;
+}
+
 #footer .footer-top .footer-info {
     margin-bottom: 30px;
 }
 
 #footer .footer-top .footer-wechat {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
     margin-bottom: 30px;
 }
 
 #footer .footer-top .footer-wechat img {
-    height: 180px;
+    width: min(180px, 100%);
+    height: auto;
     margin-bottom: 10px;
 }
 
@@ -2220,6 +2228,41 @@ h6 {
 
 #footer .credits a:hover {
     color: #FFFFFF;
+}
+
+@media (max-width: 991px) {
+    #footer .footer-top .row {
+        row-gap: 34px;
+    }
+
+    #footer .footer-top .footer-wechat {
+        align-items: center;
+        margin-bottom: 0;
+        text-align: center;
+    }
+
+    #footer .footer-top .footer-wechat h4 {
+        width: min(180px, 100%);
+    }
+
+    #footer .footer-top .footer-wechat img {
+        width: clamp(132px, 28vw, 168px);
+        max-width: 100%;
+    }
+}
+
+@media (max-width: 575px) {
+    #footer .footer-top {
+        padding: 48px 0 34px 0;
+    }
+
+    #footer .footer-top .row {
+        row-gap: 26px;
+    }
+
+    #footer .footer-top .footer-wechat img {
+        width: min(154px, 44vw);
+    }
 }
 
 .end-time {
