@@ -1401,28 +1401,35 @@ body.home-page::after {
     align-items: center;
     justify-content: center;
     align-self: flex-start;
-    gap: 8px;
-    min-height: 32px;
+    gap: 12px;
+    min-height: 42px;
     margin: 0;
-    padding: 0 14px 0 12px;
-    color: #334155;
-    font-size: 13px;
+    padding: 0 20px 0 16px;
+    color: #0F172A;
+    font-size: 15px;
     font-weight: 700;
-    line-height: 1;
-    background: rgba(255, 255, 255, 0.54);
-    border: 1px solid rgba(148, 163, 184, 0.18);
+    line-height: 1.1;
+    background:
+        linear-gradient(135deg, rgba(255, 255, 255, 0.92), rgba(248, 250, 252, 0.72)),
+        rgba(255, 255, 255, 0.72);
+    border: 1px solid rgba(148, 163, 184, 0.22);
     border-radius: 999px;
-    box-shadow: 0 10px 28px rgba(15, 23, 42, 0.04);
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
+    box-shadow:
+        inset 0 1px 0 rgba(255, 255, 255, 0.86),
+        0 14px 34px rgba(15, 23, 42, 0.06);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
 }
 
 .home-page .home-project-category-title::before {
     content: "";
-    width: 18px;
-    height: 2px;
-    background: linear-gradient(90deg, #38BDF8, #6366F1);
+    width: 9px;
+    height: 9px;
+    background: linear-gradient(135deg, #38BDF8, #1E64FF);
     border-radius: 999px;
+    box-shadow:
+        0 0 0 5px rgba(56, 189, 248, 0.12),
+        0 0 18px rgba(30, 100, 255, 0.20);
 }
 
 .home-page .home-project-category-grid {
@@ -1510,29 +1517,24 @@ body.home-page::after {
 
 .home-page .project-card-category {
     position: absolute;
-    top: 22px;
-    right: 26px;
+    top: 24px;
+    right: 28px;
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    min-height: 34px;
-    max-width: 156px;
-    padding: 0 16px;
+    min-height: 28px;
+    max-width: 128px;
+    padding: 0 10px;
     overflow: hidden;
-    color: #0F4C81;
-    font-size: 13px;
+    color: #0369A1;
+    font-size: 12px;
     font-weight: 700;
-    line-height: 1.1;
+    line-height: 1;
     text-overflow: ellipsis;
     white-space: nowrap;
-    background: linear-gradient(135deg, rgba(255, 255, 255, 0.92), rgba(240, 249, 255, 0.74));
-    border: 1px solid rgba(56, 189, 248, 0.24);
+    background: rgba(224, 242, 254, 0.66);
+    border: 1px solid rgba(14, 165, 233, 0.16);
     border-radius: 999px;
-    box-shadow:
-        inset 0 1px 0 rgba(255, 255, 255, 0.82),
-        0 10px 24px rgba(15, 23, 42, 0.055);
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
 }
 
 .home-page .project-link:hover,
@@ -1545,7 +1547,7 @@ body.home-page::after {
     align-items: center;
     gap: 18px;
     min-width: 0;
-    padding-right: 144px;
+    padding-right: 118px;
 }
 
 .home-page .project-github-icon {
@@ -1997,10 +1999,7 @@ body.home-page::after {
     .home-page .project-card-category {
         top: 18px;
         right: 20px;
-        max-width: 136px;
-        min-height: 32px;
-        padding: 0 14px;
-        font-size: 12px;
+        max-width: 112px;
     }
 
     .home-page .project-card__top {
