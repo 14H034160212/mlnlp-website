@@ -714,13 +714,17 @@ body.committee-page::after {
     .committee-page #committee .schedule-item {
         grid-template-columns: minmax(0, 286px);
         justify-content: center;
+        justify-items: center;
         gap: 32px;
     }
 
     .committee-page #committee .team .member,
     .committee-page .member {
+        justify-self: center;
         max-width: 286px;
         min-height: 292px;
+        margin-right: auto;
+        margin-left: auto;
         padding: 12px 12px 16px;
     }
 

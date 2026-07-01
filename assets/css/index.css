@@ -1725,10 +1725,11 @@ body.home-page::after {
     display: flex;
     flex-direction: column;
     align-items: center;
+    justify-self: center;
     width: 100%;
     max-width: 286px;
     min-height: 318px;
-    margin: 0;
+    margin: 0 auto;
     padding: 14px 14px 18px;
     overflow: hidden;
     color: inherit;
@@ -2005,10 +2006,20 @@ body.home-page::after {
         gap: 32px;
     }
 
+    .home-page .home-member-grid,
+    .home-page .home-member-grid--leader {
+        grid-template-columns: minmax(0, 320px);
+        justify-content: center;
+        justify-items: center;
+    }
+
     .home-page #committee .team .member,
     .home-page .member {
+        justify-self: center;
         max-width: 320px;
         min-height: 292px;
+        margin-right: auto;
+        margin-left: auto;
     }
 
     .home-page .avatar-wrapper {

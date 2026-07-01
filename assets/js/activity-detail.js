@@ -195,15 +195,30 @@
             }
         ];
 
+        const [timeCard, ...metaCards] = cards;
+
         return `
             <section class="detail-info-strip" aria-label="活动核心信息">
-                ${cards.map(card => `
-                    <article class="detail-info-card">
-                        <i class="bi ${escapeAttr(card.icon)}"></i>
-                        <span>${escapeHtml(card.label)}</span>
-                        <strong>${escapeHtml(card.value)}</strong>
-                    </article>
-                `).join("")}
+                <article class="detail-info-highlight">
+                    <div class="detail-info-highlight__icon">
+                        <i class="bi ${escapeAttr(timeCard.icon)}"></i>
+                    </div>
+                    <div>
+                        <span>${escapeHtml(timeCard.label)}</span>
+                        <strong>${escapeHtml(timeCard.value)}</strong>
+                    </div>
+                </article>
+                <div class="detail-info-list">
+                    ${metaCards.map(card => `
+                        <article class="detail-info-item">
+                            <i class="bi ${escapeAttr(card.icon)}"></i>
+                            <div>
+                                <span>${escapeHtml(card.label)}</span>
+                                <strong>${escapeHtml(card.value)}</strong>
+                            </div>
+                        </article>
+                    `).join("")}
+                </div>
             </section>
         `;
     }
