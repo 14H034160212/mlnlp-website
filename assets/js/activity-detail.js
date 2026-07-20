@@ -265,14 +265,20 @@
     }
 
     function renderSchedule(activity, segments) {
-        if (!segments.length) {
+        const agendaSegments = Number(activity.type) === 2
+            ? segments.filter(segment => Number(segment.role) !== 2)
+            : segments;
+
+        if (!agendaSegments.length) {
             return renderEmpty("活动议程待更新。");
         }
 
         return `
             <div class="detail-schedule">
-                ${segments.map(segment => {
-                    const timeRange = formatTimeRange(segment.start_time, segment.end_time);
+                ${agendaSegments.map(segment => {
+                    const timeRange = Number(activity.type) === 3
+                        ? formatTalkTimeRange(activity, segment)
+                        : formatTimeRange(segment.start_time, segment.end_time);
                     const speakerMeta = [segment.name, segment.organization, segment.title].filter(Boolean).join(" · ");
                     const heading = segment.heading || ROLE_LABELS[segment.role] || "活动环节";
                     const description = getSummary(segment.description || "", 180);
@@ -469,6 +475,40 @@
 
         const date = start || end;
         return `${pad(date.getHours())}:${pad(date.getMinutes())}`;
+    }
+
+    function formatTalkTimeRange(activity, segment) {
+        const activityDate = parseDate(activity.time);
+        const rawStart = parseDate(segment.start_time) || activityDate;
+        const rawEnd = parseDate(segment.end_time);
+
+        if (!rawStart && !rawEnd) {
+            return "待更新";
+        }
+
+        const start = alignTimeToActivityDate(rawStart, activityDate);
+        let end = alignTimeToActivityDate(rawEnd, activityDate);
+
+        if (start && (!end || end.getTime() <= start.getTime())) {
+            end = new Date(start.getTime() + 60 * 60 * 1000);
+        }
+
+        if (start && end) {
+            return `${pad(start.getHours())}:${pad(start.getMinutes())} - ${pad(end.getHours())}:${pad(end.getMinutes())}`;
+        }
+
+        const date = start || end;
+        return `${pad(date.getHours())}:${pad(date.getMinutes())}`;
+    }
+
+    function alignTimeToActivityDate(value, activityDate) {
+        if (!value || !activityDate) {
+            return value;
+        }
+
+        const aligned = new Date(activityDate.getTime());
+        aligned.setHours(value.getHours(), value.getMinutes(), value.getSeconds(), value.getMilliseconds());
+        return aligned;
     }
 
     function parseDate(value) {
