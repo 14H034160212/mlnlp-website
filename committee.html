@@ -47,7 +47,7 @@
 
     <!-- Template Main CSS File -->
     <link href="assets/css/style.css?v=20260629-logo-left" rel="stylesheet">
-    <link href="assets/css/committee.css?v=20260701-mobile-members-center" rel="stylesheet">
+    <link href="assets/css/committee.css?v=20260721-member-status" rel="stylesheet">
     <script src="assets/js/jquery.min.js?v=20260621-fix15"></script>
 </head>
 
@@ -140,6 +140,26 @@
         { name: "包启明", title: "副组长" }
     ];
 
+    const ACADEMIC_MEMBER_STATUS = {
+        "蒋理": "国家级青年人才",
+        "潘亮铭": "国家级青年人才",
+        "田倬韬": "国家级青年人才",
+        "王金鹏": "国家级青年人才",
+        "王文杰": "国家级青年人才",
+        "刘东瑞": "青年科学家",
+        "潘玲": "微软学者",
+        "张林峰": "微软学者",
+        "张倬胜": "中国中文信息学会优博"
+    };
+
+    function getAcademicMemberStatus(member) {
+        if (member.role !== "学术委员") {
+            return "";
+        }
+
+        return ACADEMIC_MEMBER_STATUS[member.name] || "博士生导师";
+    }
+
     function findStudentExecutiveMembers(members) {
         const memberByName = new Map(members.map((member) => [member.name, member]));
         const byPinyin = (a, b) => a.pinyin.localeCompare(b.pinyin);
@@ -165,6 +185,7 @@
 
     function renderMemberCard(member) {
         const avatarClass = getAvatarClass(member.avatar_url);
+        const academicStatus = getAcademicMemberStatus(member);
         return `
                         <div class="schedule-card">
                             <a class="member" target="_blank" href="${member.homepage_url}">
@@ -175,6 +196,7 @@
                                 </div>
                                 <div class="member-info">
                                     <h4>${member.name}${member.executiveTitle ? `（${member.executiveTitle}）` : ""}</h4>
+                                    ${academicStatus ? `<span class="member-status">${academicStatus}</span>` : ""}
                                     <span>${member.organization}</span>
                                 </div>
                             </a>

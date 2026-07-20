@@ -246,7 +246,8 @@
         const role = ROLE_LABELS[speaker.role] || "嘉宾";
         const affiliation = [speaker.organization, speaker.title].filter(Boolean).join(" · ") || "机构信息待更新";
         const topic = speaker.heading ? `分享：${speaker.heading}` : "分享主题待更新";
-        const biography = stripHtml(speaker.biography || "");
+        const biography = stripHtml(speaker.biography || "")
+            .replace(/\s*二、分享嘉宾：\s*$/, "");
 
         return `
             <article class="detail-speaker">

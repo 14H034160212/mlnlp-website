@@ -490,6 +490,13 @@ body.committee-page::after {
     line-height: 1.6;
 }
 
+.committee-page .member-info .member-status {
+    margin-bottom: 2px;
+    color: var(--committee-accent-dark);
+    font-size: 13px;
+    font-weight: 600;
+}
+
 .committee-page .committee-hero,
 .committee-page .member-group,
 .committee-page .member {

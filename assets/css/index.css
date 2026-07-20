@@ -1869,6 +1869,13 @@ body.home-page::after {
     line-height: 1.6;
 }
 
+.home-page .member-info .member-status {
+    margin-bottom: 2px;
+    color: #0369A1;
+    font-size: 13px;
+    font-weight: 600;
+}
+
 .home-page .home-member-footer {
     display: flex;
     justify-content: center;
