@@ -161,7 +161,6 @@
 
     function renderInfoCards(activity, segments) {
         const typeLabel = getActivityTypeLabel(activity.type);
-        const status = getActivityStatus(activity);
         const cards = [
             {
                 icon: "bi-calendar2-check",
@@ -187,11 +186,6 @@
                 icon: "bi-building",
                 label: "主办方",
                 value: "MLNLP 社区"
-            },
-            {
-                icon: "bi-link-45deg",
-                label: "参与方式",
-                value: canShowReplay(activity) && activity.video_url ? "观看回放" : status.actionText
             }
         ];
 
@@ -394,36 +388,6 @@
 
     function getActivityTypeLabel(type) {
         return ACTIVITY_TYPES[type] || "学术活动";
-    }
-
-    function getActivityStatus(activity) {
-        const eventDate = parseDate(activity.time);
-        const now = new Date();
-
-        if (eventDate && eventDate.getTime() > now.getTime()) {
-            return {
-                key: "upcoming",
-                label: "报名 / 预约中",
-                actionText: "公众号报名通知",
-                icon: "bi-hourglass-split"
-            };
-        }
-
-        if (canShowReplay(activity) && activity.video_url) {
-            return {
-                key: "replay",
-                label: "回放已开放",
-                actionText: "观看回放",
-                icon: "bi-play-circle"
-            };
-        }
-
-        return {
-            key: "closed",
-            label: "活动已结束",
-            actionText: "关注后续通知",
-            icon: "bi-check2-circle"
-        };
     }
 
     function canShowReplay(activity) {
