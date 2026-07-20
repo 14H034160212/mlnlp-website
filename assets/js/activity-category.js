@@ -21,6 +21,8 @@
         3: "MLNLP Academic Talk"
     };
 
+    const canShowReplay = (activity) => Number(activity?.type) !== 2;
+
     // 活动分类 Tab（任务3：仅对社区自主活动按类型分类展示）
     const TYPE_TABS = [
         { value: 0, label: "全部" },
@@ -179,7 +181,14 @@
         setText("event-time", formatEventTime(activity));
 
         updateLink("event-detail-link", activity.html_url, "查看详情", "详情待更新");
-        updateLink("event-replay-link", activity.video_url, "观看回放", "回放待更新");
+
+        const replayNode = document.getElementById("event-replay-link");
+        if (replayNode) {
+            replayNode.hidden = !canShowReplay(activity);
+        }
+        if (canShowReplay(activity)) {
+            updateLink("event-replay-link", activity.video_url, "观看回放", "回放待更新");
+        }
     };
 
     async function loadPage(totalPages, currentPage) {
@@ -192,7 +201,7 @@
                 const date = formatListDate(activity.time);
                 const description = getEventSummary(activity, 120);
                 const typeLabel = typeMap[activity.type] || "MLNLP Event";
-                const replayLink = activity.video_url
+                const replayLink = canShowReplay(activity) && activity.video_url
                     ? `<a class="activity-replay-button activity-card-replay" href="${escapeHtml(activity.video_url)}" target="_blank" rel="noopener noreferrer" aria-label="观看 ${escapeHtml(activity.title)} 回放"><i class="bi bi-play-circle" aria-hidden="true"></i><span>观看回放</span></a>`
                     : "";
 
