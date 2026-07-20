@@ -116,7 +116,7 @@
                 <div class="detail-content">
                     ${renderContentSection("活动简介", "bi-stars", renderRichText(activity.description), "detail-overview")}
                     ${renderContentSection("嘉宾介绍", "bi-person-lines-fill", renderSpeakerCards(segments), "detail-speakers")}
-                    ${renderContentSection("活动议程", "bi-calendar2-week", renderSchedule(segments), "detail-agenda")}
+                    ${renderContentSection("活动议程", "bi-calendar2-week", renderSchedule(activity, segments), "detail-agenda")}
                 </div>
             </section>
         `;
@@ -137,7 +137,7 @@
                         <h1 id="activity-title">${escapeHtml(activity.title)}</h1>
                         <p class="detail-hero__lead">${escapeHtml(getSummary(activity.description, 210))}</p>
                         <div class="detail-hero__actions">
-                            ${renderActionLink(primaryAction, "detail-button--primary")}
+                            ${primaryAction ? renderActionLink(primaryAction, "detail-button--primary") : ""}
                             ${renderActionLink({ href: "#detail-overview", label: "查看详情", icon: "bi-arrow-down", external: false }, "detail-button--secondary")}
                             ${renderActionLink({ href: "#footer", label: "关注公众号", icon: "bi-wechat", external: false }, "detail-button--secondary")}
                         </div>
@@ -191,7 +191,7 @@
             {
                 icon: "bi-link-45deg",
                 label: "参与方式",
-                value: activity.video_url ? "观看回放" : status.actionText
+                value: canShowReplay(activity) && activity.video_url ? "观看回放" : status.actionText
             }
         ];
 
@@ -270,7 +270,7 @@
         `;
     }
 
-    function renderSchedule(segments) {
+    function renderSchedule(activity, segments) {
         if (!segments.length) {
             return renderEmpty("活动议程待更新。");
         }
@@ -291,7 +291,7 @@
                                 ${description ? `<p>${escapeHtml(description)}</p>` : ""}
                                 <div class="detail-schedule-meta">
                                     <span><i class="bi bi-person"></i>${escapeHtml(speakerMeta || "嘉宾信息待更新")}</span>
-                                    ${segment.video_url ? `<a class="detail-link-chip" href="${escapeAttr(segment.video_url)}" target="_blank" rel="noopener"><i class="bi bi-play-circle"></i>回放</a>` : ""}
+                                    ${canShowReplay(activity) && segment.video_url ? `<a class="detail-link-chip" href="${escapeAttr(segment.video_url)}" target="_blank" rel="noopener"><i class="bi bi-play-circle"></i>回放</a>` : ""}
                                     ${segment.ppt_url ? `<a class="detail-link-chip" href="${escapeAttr(segment.ppt_url)}" target="_blank" rel="noopener"><i class="bi bi-file-earmark-slides"></i>PPT</a>` : ""}
                                 </div>
                             </div>
@@ -375,7 +375,7 @@
     }
 
     function getPrimaryAction(activity) {
-        if (activity.video_url) {
+        if (canShowReplay(activity) && activity.video_url) {
             return {
                 href: activity.video_url,
                 label: "观看回放",
@@ -409,7 +409,7 @@
             };
         }
 
-        if (activity.video_url) {
+        if (canShowReplay(activity) && activity.video_url) {
             return {
                 key: "replay",
                 label: "回放已开放",
@@ -424,6 +424,10 @@
             actionText: "关注后续通知",
             icon: "bi-check2-circle"
         };
+    }
+
+    function canShowReplay(activity) {
+        return Number(activity && activity.type) !== 2;
     }
 
     function getUniqueSpeakers(segments) {
