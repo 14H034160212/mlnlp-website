@@ -149,11 +149,26 @@
         "刘东瑞": "青年科学家",
         "潘玲": "微软学者",
         "张林峰": "微软学者",
-        "张倬胜": "中国中文信息学会优博"
+        "张倬胜": "中国中文信息学会优博",
+        "冯夏冲": "博士后研究员"
     };
 
+    const ACADEMIC_MEMBER_STATUS_HIDDEN_NAMES = new Set(["赵健安"]);
+    const ACADEMIC_MEMBER_STATUS_HIDDEN_ORGANIZATIONS = new Set([
+        "xAI",
+        "腾讯",
+        "HeyGen",
+        "谷歌DeepMind",
+        "华为",
+        "微软亚洲研究院"
+    ]);
+
     function getAcademicMemberStatus(member) {
-        if (member.role !== "学术委员") {
+        if (
+            member.role !== "学术委员" ||
+            ACADEMIC_MEMBER_STATUS_HIDDEN_NAMES.has(member.name) ||
+            ACADEMIC_MEMBER_STATUS_HIDDEN_ORGANIZATIONS.has(member.organization)
+        ) {
             return "";
         }
 

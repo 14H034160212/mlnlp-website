@@ -330,34 +330,6 @@ body.activity-page::after {
     object-fit: cover;
 }
 
-.activity-page .activity-replay-button {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    gap: 6px;
-    width: fit-content;
-    min-height: 34px;
-    padding: 0 2px;
-    color: var(--activity-accent-dark);
-    font-size: 13px;
-    font-weight: 700;
-    line-height: 1;
-    background: transparent;
-    border: 0;
-    border-radius: 0;
-    transition: transform 240ms var(--activity-ease), color 240ms ease;
-}
-
-.activity-page .activity-replay-button:hover {
-    color: var(--activity-text);
-    transform: translateY(-1px);
-}
-
-.activity-page .activity-replay-button i {
-    font-size: 15px;
-    line-height: 1;
-}
-
 .activity-page .event-info-card {
     display: flex;
     flex-direction: column;
@@ -796,15 +768,6 @@ body.activity-page::after {
     text-align: left;
     -webkit-box-orient: vertical;
     -webkit-line-clamp: 2;
-}
-
-.activity-page .activity-category-actions {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: flex-end;
-    gap: 10px;
-    margin-top: auto;
-    padding-top: 18px;
 }
 
 .activity-page #pagination {

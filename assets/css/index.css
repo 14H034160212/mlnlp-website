@@ -1103,22 +1103,6 @@ body.home-page::after {
     display: block;
 }
 
-.home-page .home-activity-replay {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    gap: 6px;
-}
-
-.home-page .home-activity-replay:hover {
-    color: #0369A1;
-}
-
-.home-page .home-activity-replay i {
-    font-size: 15px;
-    line-height: 1;
-}
-
 .home-page #slides-container .slide {
     display: block;
     width: 100%;
