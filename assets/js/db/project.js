@@ -1,3 +1,27 @@
+const PROJECT_GITHUB_STATS = {
+    "MLNLP-World/MIT-Linear-Algebra-Notes": { stars: 3752, forks: 699 },
+    "MLNLP-World/Top-AI-Conferences-Paper-with-Code": { stars: 2670, forks: 601 },
+    "MLNLP-World/AI-Paper-Collector": { stars: 1174, forks: 119 },
+    "MLNLP-World/SimBiber": { stars: 468, forks: 38 },
+    "MLNLP-World/Paper-Writing-Tips": { stars: 4567, forks: 534 },
+    "MLNLP-World/DeepLearning-MuLi-Notes": { stars: 3799, forks: 591 },
+    "MLNLP-World/Paper-Picture-Writing-Code": { stars: 1244, forks: 119 },
+    "MLNLP-World/Deep_Learning_Notes": { stars: 88, forks: 10 },
+    "MLNLP-World/Pytorch-Deep-Learning-Practice-Notes": { stars: 87, forks: 14 },
+    "MLNLP-World/MyArxiv": { stars: 343, forks: 26 },
+    "MLNLP-World/NLP-Course-Chinese": { stars: 179, forks: 17 },
+    "MLNLP-World/LLMs-from-scratch-CN": { stars: 2766, forks: 456 },
+    "MLNLP-World/Reinforcement-Learning-Comic-Notes": { stars: 68, forks: 3 },
+    "MLNLP-World/Overleaf-Bib-Helper": { stars: 128, forks: 5 },
+    "MLNLP-World/Academic-Resume-Template": { stars: 263, forks: 23 },
+    "MLNLP-World/minimind-notes": { stars: 123, forks: 7 },
+    "MLNLP-World/MachineLearning2025Spring--Notes": { stars: 43, forks: 2 },
+    "MLNLP-World/reasoning-from-scratch-CN": { stars: 51, forks: 7 },
+    "MLNLP-World/gpu-watchdog": { stars: 3, forks: 1 },
+    "MLNLP-World/LLMBeginner": { stars: 178, forks: 21 },
+    "MLNLP-World/Paper-Rebuttal-Tips": { stars: 162, forks: 17 }
+};
+
 async function findAllProjects() {
     const query = `
         select id,
@@ -15,5 +39,12 @@ async function findAllProjects() {
         where github_repo <> 'MLNLP-World/Awesome-LLM'
         order by stars desc;
     `;
-    return await execute(query);
+    const projects = await execute(query);
+
+    return projects
+        .map((project) => ({
+            ...project,
+            ...(PROJECT_GITHUB_STATS[project.github_repo] || {})
+        }))
+        .sort((a, b) => Number(b.stars) - Number(a.stars));
 }

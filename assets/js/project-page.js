@@ -60,7 +60,7 @@
 
     function hydrateGithubStats() {
         const targets = new Map();
-        const statsCacheVersion = "20260623-project-forks-v2";
+        const statsCacheVersion = "20260721-github-stats";
 
         Object.keys(window.sessionStorage).forEach((key) => {
             if (key.startsWith("mlnlp:github-stats:") && !key.startsWith(`mlnlp:github-stats:${statsCacheVersion}:`)) {

@@ -20,7 +20,7 @@
     <script src="./assets/js/db/db.js?v=20260720-talk-77-cover"></script>
     <script src="./assets/js/db/activity.js?v=20260621-fix15"></script>
     <script src="./assets/js/db/member.js?v=20260623-member-secretariat-order"></script>
-    <script src="./assets/js/db/project.js?v=20260721-paper-collector-description"></script>
+    <script src="./assets/js/db/project.js?v=20260721-github-stats"></script>
 
     <meta charset="utf-8">
     <!-- 设置视口，使页面在不同设备上自适应屏幕宽度，初始缩放比例为1.0 -->
@@ -673,6 +673,7 @@
 
     function hydrateHomeProjectStats(formatCount) {
         const targets = new Map();
+        const statsCacheVersion = "20260721-github-stats";
 
         document.querySelectorAll("[data-home-stars-repo], [data-home-forks-repo]").forEach((badge) => {
             const repo = badge.getAttribute("data-home-stars-repo") || badge.getAttribute("data-home-forks-repo");
@@ -713,7 +714,7 @@
         }
 
         targets.forEach(async (target, repo) => {
-            const cacheKey = `mlnlp:home:github-stats:${repo}`;
+            const cacheKey = `mlnlp:home:github-stats:${statsCacheVersion}:${repo}`;
             const cachedValue = window.sessionStorage.getItem(cacheKey);
             if (cachedValue) {
                 applyStats(target, JSON.parse(cachedValue));
