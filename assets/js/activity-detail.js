@@ -256,7 +256,7 @@
                     <div class="detail-speaker-role">${escapeHtml(role)}</div>
                     <h3>${escapeHtml(speaker.name || "待更新")}</h3>
                     <p>${escapeHtml(affiliation)}</p>
-                    ${speaker.github_url ? `<a class="detail-speaker-github" href="${escapeAttr(speaker.github_url)}" target="_blank" rel="noopener"><i class="bi bi-github"></i> GitHub</a>` : ""}
+                    ${speaker.github_url ? `<a class="detail-speaker-github" href="${escapeAttr(speaker.github_url)}" target="_blank" rel="noopener"><i class="bi bi-house-door"></i> 主页</a>` : ""}
                 </div>
                 <div class="detail-speaker-topic">
                     <strong>${escapeHtml(topic)}</strong>
