@@ -398,7 +398,7 @@
     }
 
     function canShowReplay(activity) {
-        return Number(activity && activity.type) !== 2;
+        return true;  // 研讨会也显示回放(有video_url即显示)
     }
 
     function getUniqueSpeakers(segments) {
