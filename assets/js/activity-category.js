@@ -5,7 +5,7 @@
     const AUTOPLAY_DELAY = 6200;
     const DEFAULT_FEATURED_ACTIVITY = {
         type: 2,
-        typeId: 26
+        typeId: 41
     };
     const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 

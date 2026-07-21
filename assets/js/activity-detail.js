@@ -274,12 +274,18 @@
             return renderEmpty("活动议程待更新。");
         }
 
+        const seminarTimeRanges = Number(activity.type) === 2
+            ? getSeminarTimeRanges(activity, agendaSegments)
+            : [];
+
         return `
             <div class="detail-schedule">
-                ${agendaSegments.map(segment => {
+                ${agendaSegments.map((segment, index) => {
                     const timeRange = Number(activity.type) === 3
                         ? formatTalkTimeRange(activity, segment)
-                        : formatTimeRange(segment.start_time, segment.end_time);
+                        : Number(activity.type) === 2
+                            ? seminarTimeRanges[index]
+                            : formatTimeRange(segment.start_time, segment.end_time);
                     const speakerMeta = [segment.name, segment.organization, segment.title].filter(Boolean).join(" · ");
                     const heading = segment.heading || ROLE_LABELS[segment.role] || "活动环节";
                     const description = getSummary(segment.description || "", 180);
@@ -500,6 +506,33 @@
 
         const date = start || end;
         return `${pad(date.getHours())}:${pad(date.getMinutes())}`;
+    }
+
+    function getSeminarTimeRanges(activity, segments) {
+        let nextStart = parseDate(activity.time);
+
+        return segments.map(segment => {
+            const recordedStart = parseDate(segment.start_time);
+            const recordedEnd = parseDate(segment.end_time);
+
+            if (recordedStart && recordedEnd && recordedEnd.getTime() > recordedStart.getTime()) {
+                const hasBreak = Number(segment.role) !== 1 && Number(segment.type) !== 1;
+                nextStart = new Date(recordedEnd.getTime() + (hasBreak ? 5 : 0) * 60 * 1000);
+                return formatTimeRange(segment.start_time, segment.end_time);
+            }
+
+            const start = nextStart || recordedStart || recordedEnd;
+            if (!start) {
+                return "待更新";
+            }
+
+            const isOpening = Number(segment.role) === 1 || Number(segment.type) === 1;
+            const durationMinutes = isOpening ? 5 : 40;
+            const end = new Date(start.getTime() + durationMinutes * 60 * 1000);
+            nextStart = new Date(end.getTime() + (isOpening ? 0 : 5) * 60 * 1000);
+
+            return `${pad(start.getHours())}:${pad(start.getMinutes())} - ${pad(end.getHours())}:${pad(end.getMinutes())}`;
+        });
     }
 
     function alignTimeToActivityDate(value, activityDate) {
