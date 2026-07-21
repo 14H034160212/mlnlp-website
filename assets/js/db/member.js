@@ -2,7 +2,12 @@ const MEMBER_HOMEPAGE_OVERRIDES = {
     "张林峰": "http://www.zhanglinfeng.tech",
     "潘亮铭": "https://liangmingpan.bio/",
     "陈冲": "https://chenchongthu.github.io",
-    "柴成亮": "https://github.com/chai-chengliang"
+    "柴成亮": "https://github.com/chai-chengliang",
+    "杜梦楠": "https://mengnandu.com/"
+};
+
+const MEMBER_ORGANIZATION_OVERRIDES = {
+    "李北": "美团"
 };
 
 async function findMembersByGroup() {
@@ -140,7 +145,13 @@ async function findMembersByRoleAndByTerm(role_id, term_id) {
 
     return members == null
         ? null
-        : members.map((member) => MEMBER_HOMEPAGE_OVERRIDES[member.name]
-            ? { ...member, homepage_url: MEMBER_HOMEPAGE_OVERRIDES[member.name] }
-            : member);
+        : members.map((member) => ({
+            ...member,
+            ...(MEMBER_HOMEPAGE_OVERRIDES[member.name]
+                ? { homepage_url: MEMBER_HOMEPAGE_OVERRIDES[member.name] }
+                : {}),
+            ...(MEMBER_ORGANIZATION_OVERRIDES[member.name]
+                ? { organization: MEMBER_ORGANIZATION_OVERRIDES[member.name] }
+                : {})
+        }));
 }
