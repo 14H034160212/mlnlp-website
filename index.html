@@ -235,7 +235,14 @@
         "潘玲": "微软学者",
         "张林峰": "微软学者",
         "张倬胜": "中国中文信息学会优博",
-        "冯夏冲": "博士后研究员"
+        "冯夏冲": "博士后研究员",
+        "陈冲": "华为云高级研究员",
+        "刘乾": "Member of Technical Staff",
+        "林禹臣": "Member of Technical Staff",
+        "庞天宇": "Principal Scientist",
+        "任意": "Foundation Video Model Lead",
+        "王亚庆": "Research Scientist",
+        "李北": "美团：研究员"
     };
 
     const ACADEMIC_MEMBER_STATUS_HIDDEN_NAMES = new Set(["赵健安"]);
@@ -249,15 +256,17 @@
     ]);
 
     function getAcademicMemberStatus(member) {
-        if (
-            member.role !== "学术委员" ||
-            ACADEMIC_MEMBER_STATUS_HIDDEN_NAMES.has(member.name) ||
-            ACADEMIC_MEMBER_STATUS_HIDDEN_ORGANIZATIONS.has(member.organization)
-        ) {
+        if (member.role !== "学术委员" || ACADEMIC_MEMBER_STATUS_HIDDEN_NAMES.has(member.name)) {
             return "";
         }
 
-        return ACADEMIC_MEMBER_STATUS[member.name] || "博士生导师";
+        if (ACADEMIC_MEMBER_STATUS[member.name]) {
+            return ACADEMIC_MEMBER_STATUS[member.name];
+        }
+
+        return ACADEMIC_MEMBER_STATUS_HIDDEN_ORGANIZATIONS.has(member.organization)
+            ? ""
+            : "博士生导师";
     }
 
     function findStudentExecutiveMembers(members) {
