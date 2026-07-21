@@ -29,6 +29,8 @@ async function findAllProjects() {
                case
                    when github_repo = 'MLNLP-World/AI-Paper-Collector'
                        then '本项目提供了一套用于自动收集 AI 领域论文的脚本，可按研究方向持续追踪并整理最新成果。项目支持从多个来源获取论文信息，减少重复检索与人工归档的成本，帮助研究者更高效地构建和维护自己的论文资料库。'
+                   when github_repo = 'MLNLP-World/Paper-Rebuttal-Tips'
+                       then 'MLNLP 社区用来帮助大家准备论文 Rebuttal 的资料整理仓库，并汇总回复思路、常见问题与实用表达。'
                    else description
                end as description,
                html_url,
