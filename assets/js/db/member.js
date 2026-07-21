@@ -1,13 +1,17 @@
 const MEMBER_HOMEPAGE_OVERRIDES = {
-    "张林峰": "http://www.zhanglinfeng.tech",
+    "张林峰": "https://archiplab-linfengzhang.github.io/",
     "潘亮铭": "https://liangmingpan.bio/",
     "陈冲": "https://chenchongthu.github.io",
-    "柴成亮": "https://github.com/chai-chengliang",
-    "杜梦楠": "https://mengnandu.com/"
+    "柴成亮": "https://chai-chengliang.github.io/",
+    "杜梦楠": "https://mengnandu.com/",
+    "王金鹏": "http://fingerrec.github.io",
+    "矣晓沅": "https://xiaoyuanyi.github.io/",
+    "赵翔宇": "https://zhaoxyai.github.io/"
 };
 
 const MEMBER_ORGANIZATION_OVERRIDES = {
-    "李北": "美团"
+    "李北": "美团",
+    "许德容": "中国科学技术大学 & 香港城市大学"
 };
 
 async function findMembersByGroup() {
