@@ -269,25 +269,22 @@
 
     async function initSlides() {
         try {
-            const result = await findActivitiesByPage(1, PAGE_SIZE, currentType);
-            featuredActivities = result.activities || [];
-            const defaultSlideIndex = featuredActivities.findIndex((activity) =>
-                Number(activity.type) === DEFAULT_FEATURED_ACTIVITY.type &&
-                Number(activity.type_id) === DEFAULT_FEATURED_ACTIVITY.typeId
-            );
+            const [result, defaultResult] = await Promise.all([
+                findActivitiesByPage(1, PAGE_SIZE, currentType),
+                findActivity(DEFAULT_FEATURED_ACTIVITY.type, DEFAULT_FEATURED_ACTIVITY.typeId)
+            ]);
+            const recentActivities = result.activities || [];
+            const defaultActivity = defaultResult && defaultResult.activity;
 
-            if (defaultSlideIndex > 0) {
-                const [defaultActivity] = featuredActivities.splice(defaultSlideIndex, 1);
-                featuredActivities.unshift(defaultActivity);
-            } else if (defaultSlideIndex < 0) {
-                const defaultResult = await findActivity(DEFAULT_FEATURED_ACTIVITY.type, DEFAULT_FEATURED_ACTIVITY.typeId);
-                if (defaultResult && defaultResult.activity) {
-                    if (featuredActivities.length >= PAGE_SIZE) {
-                        featuredActivities.pop();
-                    }
-                    featuredActivities.unshift(defaultResult.activity);
-                }
-            }
+            featuredActivities = defaultActivity
+                ? [
+                    defaultActivity,
+                    ...recentActivities.filter((activity) => !(
+                        Number(activity.type) === DEFAULT_FEATURED_ACTIVITY.type &&
+                        Number(activity.type_id) === DEFAULT_FEATURED_ACTIVITY.typeId
+                    ))
+                ].slice(0, PAGE_SIZE)
+                : recentActivities;
 
             const slidesHtml = featuredActivities.map((activity, index) => `
                     <div class="slide" aria-label="${escapeHtml(activity.title)}">
