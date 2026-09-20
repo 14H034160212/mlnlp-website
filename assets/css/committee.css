@@ -414,6 +414,9 @@ body.committee-page::after {
 
 .committee-page #committee .schedule-item .speaker,
 .committee-page .avatar-inner {
+    /* Size the crop from its square wrapper, independent of the source photo. */
+    position: absolute;
+    inset: 0;
     width: 100%;
     height: 100%;
     margin: 0;

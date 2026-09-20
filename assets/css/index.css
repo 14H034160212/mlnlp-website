@@ -1784,6 +1784,9 @@ body.home-page::after {
 
 .home-page .avatar-wrapper .avatar-inner,
 .home-page .avatar-wrapper .speaker {
+    /* Size the crop from its square wrapper, independent of the source photo. */
+    position: absolute;
+    inset: 0;
     width: 100%;
     height: 100%;
     margin: 0;
