@@ -6,7 +6,7 @@
  * @throws {Error} 如果数据库文件加载失败或初始化过程中发生错误，将抛出异常。
  */
 let cachedDb = null;
-const DB_PATH = 'db/mlnlp.sqlite?v=20260920-wangpeng';
+const DB_PATH = 'db/mlnlp.sqlite?v=20261106-student-homepages';
 
 async function initDb(path) {
     if (cachedDb == null) {
